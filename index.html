@@ -169,19 +169,20 @@
                     <div id="public-duty-list" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
                 </div>
 
+                <!-- TRA CỨU HỒ SƠ THI ĐUA (ĐÃ CÂN ĐỐI KÍCH THƯỚC Ô) -->
                 <div style="background:#fff; border:1.5px solid #0ea5e9; padding:12px; border-radius:10px; margin-bottom:14px; box-shadow:0 2px 6px rgba(14, 165, 233, 0.1);">
                     <h4 style="color:#0369a1; font-size:0.95rem; margin-bottom:8px;"><i class="fa-solid fa-magnifying-glass"></i> TRA CỨU HỒ SƠ THI ĐUA</h4>
-                    <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;">
-                        <select id="public-student-select" style="flex:1; padding:8px; border-radius:8px; border:1px solid #bae6fd; font-weight:600;"></select>
-                        <select id="search-type-select" onchange="toggleSearchType()" style="width:auto; font-weight:700; background:#f0f9ff; color:#0369a1;">
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; align-items:center;">
+                        <select id="public-student-select" style="flex:2; min-width:200px; padding:8px; border-radius:8px; border:1px solid #bae6fd; font-weight:600;"></select>
+                        <select id="search-type-select" onchange="toggleSearchType()" style="flex:1; min-width:130px; padding:8px; border-radius:8px; font-weight:700; background:#f0f9ff; color:#0369a1;">
                             <option value="week">Theo Tuần</option>
-                            <option value="month">Theo Tháng / Học Kỳ / Cả Năm</option>
+                            <option value="month">Theo Tháng / Kỳ / Năm</option>
                         </select>
                     </div>
-                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                        <select id="public-detail-week-select" style="flex:1; font-weight:600;"></select>
-                        <select id="public-detail-month-select" style="flex:1; font-weight:600; display:none;"></select>
-                        <button class="btn-action" style="background:#0ea5e9;" onclick="viewStudentDetails()"><i class="fa-solid fa-search"></i> Tra cứu</button>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                        <select id="public-detail-week-select" style="flex:2; min-width:150px; padding:8px; border-radius:8px; font-weight:600;"></select>
+                        <select id="public-detail-month-select" style="flex:2; min-width:150px; padding:8px; border-radius:8px; font-weight:600; display:none;"></select>
+                        <button class="btn-action" style="background:#0ea5e9; flex:1; padding:8px;" onclick="viewStudentDetails()"><i class="fa-solid fa-search"></i> Tra cứu</button>
                     </div>
                     <div id="student-detail-report" style="background:#f0f9ff; margin-top:8px; padding:10px; border-radius:8px; border:1px dashed #7dd3fc; display:none; font-size:0.85rem;"></div>
                 </div>
@@ -212,7 +213,7 @@
             </div>
         </div>
 
-        <!-- TAB 2: TỔNG HỢP ĐIỂM & XẾP LOẠI (CHỈ HIỆN KHI ĐÃ NHẬP / CHỐT) -->
+        <!-- TAB 2: TỔNG HỢP ĐIỂM & XẾP LOẠI -->
         <div id="panel-tab2" class="view-panel">
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
@@ -315,7 +316,7 @@
                         </div>
                         <div class="form-group mb-0">
                             <label>Giáo Viên Chủ Nhiệm</label>
-                            <input type="text" id="config-teacher" value="Giáp Thị Thư">
+                            <input type="text" id="config-teacher" value="Trịnh Ngọc Ánh">
                         </div>
                         <div class="form-group mb-0">
                             <label>Ngày bắt đầu Tuần 1</label>
@@ -343,10 +344,10 @@
                     <button class="btn-action" style="background:#2563eb; width:100%;" onclick="saveConfigData()"><i class="fa-solid fa-floppy-disk"></i> Lưu cấu hình toàn hệ thống</button>
                 </div>
 
-                <!-- KHU VỰC CHỐT & SỬA XẾP LOẠI ĐỊNH KỲ -->
+                <!-- GVCN XẾP LOẠI ĐỊNH KỲ (CÓ CỘT GỢI Ý VÀ CHO PHÉP SỬA TRƯỚC KHI CHỐT) -->
                 <div style="background:#fffbeb; border:1.5px solid #d97706; padding:16px; border-radius:12px; margin-bottom: 14px; box-shadow:0 2px 8px rgba(217, 119, 6, 0.08);">
-                    <h4 style="color:#b45309; font-size:1.05rem; margin-bottom:8px; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-lock"></i> CHỐT & SỬA KẾT QUẢ XẾP LOẠI ĐỊNH KỲ</h4>
-                    <p style="font-size:0.82rem; color:#92400e; margin-bottom:10px;">Chọn khoảng thời gian, bấm <strong>Tải bảng xếp loại</strong> để kiểm tra/chỉnh sửa trực tiếp kết quả, sau đó bấm <strong>🔒 Chốt dữ liệu chính thức</strong> để hiển thị ra ngoài.</p>
+                    <h4 style="color:#b45309; font-size:1.05rem; margin-bottom:8px; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-lock"></i> GVCN XẾP LOẠI ĐỊNH KỲ</h4>
+                    <p style="font-size:0.82rem; color:#92400e; margin-bottom:10px;">Chọn khoảng thời gian, bấm <strong>Tải bảng xếp loại</strong> để kiểm tra/chỉnh sửa trực tiếp kết quả theo cột gợi ý, sau đó bấm <strong>🔒 Chốt dữ liệu chính thức</strong> để công khai cho PH và học sinh xem.</p>
                     <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
                         <select id="admin-grading-period" style="padding:8px; border-radius:8px; border:1.5px solid #d97706; font-weight:bold; width:auto;">
                             <optgroup label="Xếp Loại Tháng">
@@ -367,8 +368,8 @@
                                     <tr style="background:#fef3c7; color:#b45309;">
                                         <th style="width:45px;">STT</th>
                                         <th style="text-align:left;">Học sinh</th>
-                                        <th style="width:120px;">Gợi ý máy</th>
-                                        <th style="width:160px;">Xếp loại (GVCN sửa)</th>
+                                        <th style="width:130px;">Cột gợi ý</th>
+                                        <th style="width:160px;">Xếp loại (GVCN chỉnh sửa)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="admin-grading-editor-tbody"></tbody>
@@ -511,58 +512,58 @@
             </div>
         </div>
 
-        <!-- BẢN QUYỀN NHỎ GỌN DƯỚI CHÂN TRANG -->
+        <!-- BẢN QUYỀN CHUẨN DƯỚI CHÂN TRANG -->
         <footer style="text-align:center; padding:12px 0; color:#94a3b8; font-size:0.7rem; font-weight:500;">
-            Bản quyền sở hữu cô giáo Giáp Thị Thư, Bắc Ninh
+            Bản quyền sở hữu cô giáo Trịnh Ngọc Ánh – GV THPT Tân Yên số 2, Bắc Ninh
         </footer>
     </div>
 
-    <!-- MODAL QUY CHẾ ĐẦY ĐỦ -->
+    <!-- MODAL QUY CHẾ VĂN PHONG CHUẨN MỰC -->
     <div class="modal-overlay" id="rulesModal">
         <div class="auth-card" style="max-width:750px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:2px solid var(--primary); padding-bottom:8px;">
-                <h4 style="font-weight: 800; color:var(--primary); font-size:1.1rem; margin:0;"><i class="fa-solid fa-scale-balanced"></i> QUY CHẾ CHẤM ĐIỂM & XẾP LOẠI THI ĐUA</h4>
+                <h4 style="font-weight: 800; color:var(--primary); font-size:1.1rem; margin:0;"><i class="fa-solid fa-scale-balanced"></i> QUY CHẾ ĐÁNH GIÁ THI ĐUA VÀ RÈN LUYỆN</h4>
                 <button onclick="document.getElementById('rulesModal').classList.remove('open')" style="background:#e2e8f0; border:none; width:30px; height:30px; border-radius:50%; font-weight:900; cursor:pointer;">✕</button>
             </div>
             <div style="font-size:0.85rem; color:#1e293b; max-height:70vh; overflow-y:auto; line-height:1.6; padding-right:8px;">
                 <div style="background:#fef3c7; border:1px solid #fde047; padding:10px; border-radius:8px; margin-bottom:12px;">
-                    <p style="margin:0; font-weight:600; color:#92400e;">📌 NGUYÊN TẮC CHUNG: Mỗi học sinh có 100 điểm/tuần. Số điểm thay đổi theo điểm cộng/trừ các mục dưới đây. Tổ trưởng tổng hợp và nhập vào hệ thống theo đúng hạn quy định.</p>
+                    <p style="margin:0; font-weight:600; color:#92400e;">📌 NGUYÊN TẮC CHUNG: Mỗi học sinh có 100 điểm rèn luyện cơ bản mỗi tuần. Điểm số được điều chỉnh dựa trên kết quả thực hiện nội quy, các điểm cộng thành tích và điểm trừ vi phạm theo quy định chung của lớp.</p>
                 </div>
                 
-                <h5 style="color:#b91c1c; margin:10px 0 4px 0; font-weight:800; font-size:0.95rem; border-left:4px solid #b91c1c; padding-left:8px;">🔴 CÁC MỤC TRỪ ĐIỂM (Lũy tiến: Vi phạm lần 2 nhân đôi, lần 3 nhân 3):</h5>
+                <h5 style="color:#b91c1c; margin:10px 0 4px 0; font-weight:800; font-size:0.95rem; border-left:4px solid #b91c1c; padding-left:8px;">🔴 CÁC MỤC TRỪ ĐIỂM KỶ LUẬT:</h5>
                 <ul style="padding-left:20px; margin-bottom:10px;">
                     <li><strong>Nghỉ học:</strong> Có phép: -20đ/buổi; Không phép: -50đ/buổi.</li>
                     <li><strong>Đi muộn:</strong> Dưới 3 phút: -10đ; Từ 3-5 phút: -20đ; Trên 5 phút: -30đ.</li>
-                    <li><strong>Tác phong:</strong> Không đồng phục, thẻ HS: -20đ/buổi.</li>
-                    <li><strong>Ý thức lớp:</strong> Nói chuyện, làm việc riêng, mất trật tự: -20đ/lần.</li>
-                    <li><strong>Vị trí ngồi:</strong> Ngồi sai vị trí sơ đồ: -10đ/tiết.</li>
-                    <li><strong>Vệ sinh:</strong> Trực nhật bẩn, đổ rác sai quy định: -5đ/tiết.</li>
-                    <li><strong>An toàn giao thông:</strong> Không đội MBH hoặc đi xe trong sân trường: -30đ/lần.</li>
-                    <li><strong>Lỗi SĐB / Cờ đỏ:</strong> Lỗi cờ đỏ ghi nhận (x2 điểm lỗi); Bị ghi tên SĐB: -30đ/lỗi.</li>
-                    <li><strong>Học tập:</strong> Thiếu ĐD, ĐC học tập: -20đ/lần; Không học/làm bài cũ: -30đ/lần.</li>
-                    <li><strong>Thiết bị điện tử:</strong> Sử dụng điện thoại trong giờ học: -100đ + thu giữ theo quy định.</li>
-                    <li><strong>Cán bộ lớp:</strong> Không hoàn thành nhiệm vụ: Trừ gấp 1.5 lần điểm cộng. Nộp báo cáo quá hạn: Phạt hệ số Tổ trưởng.</li>
+                    <li><strong>Tác phong:</strong> Không đồng phục, thiếu thẻ học sinh: -20đ/buổi.</li>
+                    <li><strong>Ý thức lớp học:</strong> Nói chuyện, làm việc riêng, mất trật tự: -20đ/lần.</li>
+                    <li><strong>Vị trí ngồi:</strong> Ngồi sai vị trí theo sơ đồ lớp: -10đ/tiết.</li>
+                    <li><strong>Vệ sinh:</strong> Trực nhật chưa sạch, đổ rác không đúng nơi quy định: -5đ/tiết.</li>
+                    <li><strong>An toàn giao thông:</strong> Không đội mũ bảo hiểm hoặc đi xe trong khu vực trường: -30đ/lần.</li>
+                    <li><strong>Sổ đầu bài & Cờ đỏ:</strong> Vi phạm bị ghi nhận trừ điểm hoặc ghi tên trong sổ đầu bài: -30đ/lỗi.</li>
+                    <li><strong>Học tập:</strong> Thiếu đồ dùng, dụng cụ học tập: -20đ/lần; Không chuẩn bị bài, không thuộc bài cũ: -30đ/lần.</li>
+                    <li><strong>Thiết bị điện tử:</strong> Sử dụng điện thoại di động trong giờ học trái quy định: -100đ và xử lý theo nội quy.</li>
+                    <li><strong>Cán bộ lớp:</strong> Không hoàn thành nhiệm vụ quản lý được giao. Nộp báo cáo quá thời hạn quy định ảnh hưởng đến thi đua chung.</li>
                 </ul>
 
-                <h5 style="color:#16a34a; margin:10px 0 4px 0; font-weight:800; font-size:0.95rem; border-left:4px solid #16a34a; padding-left:8px;">🟢 CÁC MỤC CỘNG ĐIỂM & ĐIỂM TRÁCH NHIỆM:</h5>
+                <h5 style="color:#16a34a; margin:10px 0 4px 0; font-weight:800; font-size:0.95rem; border-left:4px solid #16a34a; padding-left:8px;">🟢 CÁC MỤC CỘNG ĐIỂM & KHUYẾN KHÍCH:</h5>
                 <ul style="padding-left:20px; margin-bottom:12px;">
-                    <li><strong>Học tập & Phát biểu:</strong> Điểm ĐT (>9): +5đ; Định kỳ (>9): +10đ. Phát biểu xây dựng bài: +2đ/lần; Thuyết trình: +10đ.</li>
-                    <li><strong>Phong trào & Việc tốt:</strong> Tham gia HĐ lớp/trường: +20đ/lần (Đạt giải: KK +10đ, Ba +20đ, Nhì +30đ, Nhất +40đ). Nhặt được của rơi: +10 đến +20đ.</li>
-                    <li><strong>Điểm trách nhiệm cán sự:</strong> Lớp trưởng, Bí thư: +30đ/tuần; Lớp phó, Tổ trưởng: +20đ/tuần; Sao đỏ, Giữ SĐB: +10đ/tuần.</li>
+                    <li><strong>Học tập & Phát biểu:</strong> Đạt điểm tốt (>9) kiểm tra thường xuyên (+5đ) hoặc định kỳ (+10đ). Tích cực phát biểu xây dựng bài (+2đ/lần), thuyết trình xuất sắc (+10đ).</li>
+                    <li><strong>Phong trào & Việc tốt:</strong> Tham gia hoạt động phong trào lớp, trường (+20đ/lần; đạt giải cộng thêm theo thành tích). Hành động đẹp, nhặt được của rơi trả lại người mất (+10 đến +20đ).</li>
+                    <li><strong>Điểm trách nhiệm cán sự lớp:</strong> Lớp trưởng, Bí thư (+30đ/tuần); Lớp phó, Tổ trưởng (+20đ/tuần); Sao đỏ, Giữ sổ đầu bài (+10đ/tuần).</li>
                 </ul>
 
-                <h5 style="color:#1e3a8a; margin:14px 0 6px 0; font-weight:800; font-size:1rem; border-bottom:2px solid #3b82f6; padding-bottom:4px;">📊 TIÊU CHÍ XẾP LOẠI THI ĐUA (THÁNG, HỌC KỲ, CẢ NĂM)</h5>
-                <p style="margin-top:6px;"><strong>1. Cấp Tuần:</strong> Chấm điểm gốc 100 điểm, trừ/cộng lỗi để ra điểm số và xếp hạng nội bộ. Không gán nhãn Tốt/Khá ở tuần.</p>
-                <p style="margin-top:6px;"><strong>2. Cấp Tháng (Điểm TB + Khống chế tuần):</strong></p>
+                <h5 style="color:#1e3a8a; margin:14px 0 6px 0; font-weight:800; font-size:1rem; border-bottom:2px solid #3b82f6; padding-bottom:4px;">📊 TIÊU CHÍ XẾP LOẠI RÈN LUYỆN (THÁNG, HỌC KỲ, CẢ NĂM)</h5>
+                <p style="margin-top:6px;"><strong>1. Đánh giá theo Tuần:</strong> Chấm điểm gốc và tổng hợp điểm rèn luyện để theo dõi tiến độ thi đua nội bộ trong tuần.</p>
+                <p style="margin-top:6px;"><strong>2. Xếp loại Tháng (Dựa trên điểm trung bình và điểm khống chế tuần):</strong></p>
                 <ul style="padding-left:20px; margin-bottom:6px;">
-                    <li><strong>TỐT:</strong> Điểm Trung bình ≥ 90 điểm. (Khống chế: Không có tuần nào dưới 80 điểm).</li>
-                    <li><strong>KHÁ:</strong> Điểm Trung bình từ 80 đến dưới 90 điểm. (Khống chế: Không có tuần nào dưới 65 điểm).</li>
-                    <li><strong>ĐẠT:</strong> Điểm Trung bình từ 50 đến dưới 80 điểm.</li>
-                    <li><strong>CHƯA ĐẠT:</strong> Điểm Trung bình < 50 điểm (Hoặc vi phạm lỗi nghiêm trọng/kỷ luật nặng).</li>
+                    <li><strong>TỐT:</strong> Điểm trung bình từ 90 điểm trở lên (Không có tuần nào dưới 80 điểm).</li>
+                    <li><strong>KHÁ:</strong> Điểm trung bình từ 80 đến dưới 90 điểm (Không có tuần nào dưới 65 điểm).</li>
+                    <li><strong>ĐẠT:</strong> Điểm trung bình từ 50 đến dưới 80 điểm.</li>
+                    <li><strong>CHƯA ĐẠT:</strong> Điểm trung bình dưới 50 điểm hoặc có vi phạm kỷ luật nghiêm trọng.</li>
                 </ul>
-                <p style="margin-top:6px;"><strong>3. Cấp Học Kỳ:</strong> Có ít nhất 3 tháng đạt loại TỐT/KHÁ/ĐẠT theo chuẩn quy định, không có tháng Chưa đạt.</p>
-                <p style="margin-top:6px;"><strong>4. Cấp Cả Năm:</strong> Tổng hợp 2 học kỳ, lấy <strong>Học kỳ 2 làm trọng tâm</strong> đánh giá sự tiến bộ.</p>
-                <p style="margin-top:8px; font-style:italic; color:#475569;">💡 Chú ý chung: Máy tính chỉ đóng vai trò trợ lý thống kê, <strong>GVCN là người đưa ra quyền quyết định cuối cùng</strong> (ghi đè kết quả).</p>
+                <p style="margin-top:6px;"><strong>3. Xếp loại Học Kỳ:</strong> Tổng hợp kết quả rèn luyện qua các tháng theo chuẩn quy định của nhà trường, đảm bảo quá trình phấn đấu liên tục.</p>
+                <p style="margin-top:6px;"><strong>4. Xếp loại Cả Năm:</strong> Tổng hợp kết quả hai học kỳ, trong đó chú trọng kết quả học kỳ II để ghi nhận sự tiến bộ và nỗ lực rèn luyện của học sinh.</p>
+                <p style="margin-top:8px; font-style:italic; color:#475569;">💡 Lưu ý: Hệ thống phần mềm đóng vai trò hỗ trợ thống kê dữ liệu, giáo viên chủ nhiệm xem xét và quyết định kết quả đánh giá cuối cùng.</p>
             </div>
             <button onclick="document.getElementById('rulesModal').classList.remove('open')" class="btn-action" style="width:100%; margin-top:16px; background:#64748b; font-size:1rem;"><i class="fa-solid fa-check"></i> Đã hiểu rõ quy chế</button>
         </div>
@@ -646,7 +647,7 @@
                 schoolName: "Trường THPT Tân Yên số 2",
                 className: "Lớp 10A4", 
                 schoolYear: "2026 - 2027",
-                teacherName: "Giáp Thị Thư",
+                teacherName: "Trịnh Ngọc Ánh",
                 startDate: "2026-09-07",
                 deadlineDay: 1,
                 deadlineHour: 23,
@@ -1219,7 +1220,7 @@
                 if(studentData.penalty_1_5x) violationList.push(`Phạt quá hạn 1.5x (-${studentData.penalty_1_5x}đ)`);
 
                 let violationText = violationList.length > 0 ? violationList.join(', ') : "Không có vi phạm, em hoàn thành rất tốt nhiệm vụ.";
-                let defaultMsg = `Kính gửi PH em ${name}, Sổ chủ nhiệm điện tử ${STATE.config.className} thông báo kết quả ${week}: tổng điểm đạt ${total}đ. Chi tiết vi phạm: ${violationText}. Kính mong PH phối hợp nhắc nhở em. Trân trọng!`;
+                let defaultMsg = `GVCN lớp ${STATE.config.className} xin thông báo kết quả ${week} của em ${name}: tổng điểm đạt ${total}đ. Chi tiết vi phạm: ${violationText}. Kính mong PH phối hợp cùng giáo viên nhắc nhở em. Trân trọng!`;
 
                 let zaloBtn = phone ? `<button onclick="sendZaloMessage(${stt}, '${phone}')" class="btn-action" style="background:#0068ff; padding:5px 10px; font-size:0.75rem;"><i class="fa-solid fa-comment-sms"></i> Gửi Zalo</button>` : `<span style="color:#94a3b8; font-size:0.75rem; font-style:italic;">Chưa có SĐT</span>`;
 
