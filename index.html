@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sổ Chủ Nhiệm Điện Tử</title>
+    <title>Sổ Chủ Nhiệm Điện Tử - Lớp 10A4</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- ============================================================ -->
+    <!-- BẢN QUYỀN THUỘC SỞ HỮU CHÍNH CHỦ: CÔ TRỊNH NGỌC ÁNH (BẮC NINH) -->
+    <!-- ============================================================ -->
     <script> const MA_DU_LIEU = "11A5"; </script>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -156,6 +159,7 @@
                     <div id="homeroom-announcements-container" style="display:flex; flex-direction:column;"></div>
                 </div>
 
+                <!-- BẢNG PHÂN CÔNG TRỰC NHẬT THEO NGÀY -->
                 <div style="background:#f0fdfa; border:1.5px solid #14b8a6; padding:12px; border-radius:10px; margin-bottom:14px; box-shadow:0 2px 6px rgba(20, 184, 166, 0.1);">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                         <h4 style="color:#0f766e; font-size:0.95rem; margin:0;"><i class="fa-solid fa-broom"></i> PHÂN CÔNG TRỰC NHẬT <span id="public-duty-week-label"></span></h4>
@@ -166,20 +170,20 @@
                     <div id="public-duty-list" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
                 </div>
 
-                <!-- TRA CỨU HỒ SƠ THI ĐUA (ĐÃ CÂN ĐỐI KÍCH THƯỚC Ô) -->
+                <!-- TRA CỨU HỒ SƠ THI ĐUA (ĐÃ CÂN ĐỐI KÍCH THƯỚC Ô LẠI) -->
                 <div style="background:#fff; border:1.5px solid #0ea5e9; padding:12px; border-radius:10px; margin-bottom:14px; box-shadow:0 2px 6px rgba(14, 165, 233, 0.1);">
                     <h4 style="color:#0369a1; font-size:0.95rem; margin-bottom:8px;"><i class="fa-solid fa-magnifying-glass"></i> TRA CỨU HỒ SƠ THI ĐUA</h4>
-                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
-                        <select id="public-student-select" style="width:70%; padding:8px; border-radius:8px; border:1px solid #bae6fd; font-weight:600;"></select>
-                        <select id="search-type-select" onchange="toggleSearchType()" style="width:30%; padding:8px; border-radius:8px; font-weight:700; background:#f0f9ff; color:#0369a1;">
+                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
+                        <select id="public-student-select" style="flex:2; min-width:200px; padding:8px; border-radius:8px; border:1px solid #bae6fd; font-weight:600;"></select>
+                        <select id="search-type-select" onchange="toggleSearchType()" style="flex:1; min-width:130px; padding:8px; border-radius:8px; font-weight:700; background:#f0f9ff; color:#0369a1;">
                             <option value="week">Theo Tuần</option>
                             <option value="month">Theo Tháng/Kỳ/Năm</option>
                         </select>
                     </div>
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        <select id="public-detail-week-select" style="width:70%; padding:8px; border-radius:8px; font-weight:600;"></select>
-                        <select id="public-detail-month-select" style="width:70%; padding:8px; border-radius:8px; font-weight:600; display:none;"></select>
-                        <button class="btn-action" style="background:#0ea5e9; width:30%; padding:8px;" onclick="viewStudentDetails()"><i class="fa-solid fa-search"></i> Tra cứu</button>
+                    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                        <select id="public-detail-week-select" style="flex:2; min-width:150px; padding:8px; border-radius:8px; font-weight:600;"></select>
+                        <select id="public-detail-month-select" style="flex:2; min-width:150px; padding:8px; border-radius:8px; font-weight:600; display:none;"></select>
+                        <button class="btn-action" style="background:#0ea5e9; flex:1; min-width:100px; padding:8px;" onclick="viewStudentDetails()"><i class="fa-solid fa-search"></i> Tra cứu</button>
                     </div>
                     <div id="student-detail-report" style="background:#f0f9ff; margin-top:8px; padding:10px; border-radius:8px; border:1px dashed #7dd3fc; display:none; font-size:0.85rem;"></div>
                 </div>
@@ -296,6 +300,7 @@
         <!-- TAB 5: QUẢN TRỊ -->
         <div id="panel-tab5" class="view-panel">
             <div class="card">
+                <!-- CẤU HÌNH HỆ THỐNG -->
                 <div style="background:#eff6ff; border:1.5px solid #3b82f6; padding:12px; border-radius:10px; margin-bottom:14px;">
                     <h4 style="color:#1e40af; font-size:0.95rem; margin-bottom:10px;"><i class="fa-solid fa-gears"></i> CẤU HÌNH HỆ THỐNG & HẠN NỘP ĐIỂM</h4>
                     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:10px;">
@@ -341,7 +346,7 @@
                     <button class="btn-action" style="background:#2563eb; width:100%;" onclick="saveConfigData()"><i class="fa-solid fa-floppy-disk"></i> Lưu cấu hình toàn hệ thống</button>
                 </div>
 
-                <!-- KHU VỰC CHỐT & SỬA XẾP LOẠI ĐỊNH KỲ -->
+                <!-- GVCN XẾP LOẠI ĐỊNH KỲ (BẢNG HIỂN THỊ CHI TIẾT TỪNG THÁNG/KỲ BÊN TRONG) -->
                 <div style="background:#fffbeb; border:1.5px solid #d97706; padding:16px; border-radius:12px; margin-bottom: 14px; box-shadow:0 2px 8px rgba(217, 119, 6, 0.08);">
                     <h4 style="color:#b45309; font-size:1.05rem; margin-bottom:8px; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-lock"></i> GVCN XẾP LOẠI ĐỊNH KỲ</h4>
                     <p style="font-size:0.82rem; color:#92400e; margin-bottom:10px;">Chọn khoảng thời gian, bấm <strong>Tải bảng xếp loại</strong> để kiểm tra/chỉnh sửa trực tiếp kết quả theo cột gợi ý, sau đó bấm <strong>🔒 Chốt dữ liệu chính thức</strong> để công khai cho PH và học sinh xem.</p>
@@ -359,10 +364,10 @@
                         <button class="btn-action" style="background:#d97706;" onclick="loadAdminGradingTable()"><i class="fa-solid fa-table"></i> Tải bảng xếp loại</button>
                     </div>
                     <div id="admin-grading-editor-container" style="display:none;">
-                        <div class="table-responsive" style="max-height:350px; background:#fff; border-radius:8px;">
+                        <div class="table-responsive" style="max-height:400px; background:#fff; border-radius:8px;">
                             <table>
                                 <thead id="admin-grading-editor-thead">
-                                    <!-- Dynamic header based on period -->
+                                    <!-- Tiêu đề sẽ được tạo tự động bởi JS -->
                                 </thead>
                                 <tbody id="admin-grading-editor-tbody"></tbody>
                             </table>
@@ -376,7 +381,7 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
                         <h4 style="color:#86198f; font-size:1.05rem; margin:0;"><i class="fa-solid fa-comment-sms"></i> TỔNG HỢP LỖI & SOẠN TIN NHẮN ZALO THEO TUẦN</h4>
                         <div style="display:flex; gap:6px; align-items:center;">
-                            <select id="admin-zalo-week-select" style="padding:6px 10px; border-radius:6px; font-weight:700; border:1px solid #d946ef; color:#86198f; background:#fff;"></select>
+                            <select id="admin-zalo-week-select" onchange="renderAdminZaloSummary()" style="padding:6px 10px; border-radius:6px; font-weight:700; border:1px solid #d946ef; color:#86198f; background:#fff;"></select>
                             <button class="btn-action" style="background:#d946ef; padding:6px 12px; font-size:0.78rem;" onclick="renderAdminZaloSummary()"><i class="fa-solid fa-rotate"></i> Tải danh sách</button>
                         </div>
                     </div>
@@ -489,7 +494,7 @@
 
         <!-- BẢN QUYỀN CHUẨN DƯỚI CHÂN TRANG -->
         <footer style="text-align:center; padding:12px 0; color:#94a3b8; font-size:0.75rem; font-weight:600;">
-            Bản quyền sở hữu cô giáo Trịnh Ngọc Ánh – GV THPT Tân Yên số 2 Bắc Ninh
+            Bản quyền sở hữu cô giáo Trịnh Ngọc Ánh – GV THPT Tân Yên số 2, Bắc Ninh
         </footer>
     </div>
 
@@ -537,8 +542,8 @@
                     <li><strong>CHƯA ĐẠT:</strong> Điểm trung bình dưới 50 điểm hoặc có vi phạm kỷ luật nghiêm trọng.</li>
                 </ul>
                 <p style="margin-top:6px;"><strong>3. Xếp loại Học Kỳ:</strong> Tổng hợp kết quả rèn luyện qua các tháng theo chuẩn quy định của nhà trường, đảm bảo quá trình phấn đấu liên tục.</p>
-                <p style="margin-top:6px;"><strong>4. Xếp loại Cả Năm:</strong> Tổng hợp kết quả hai học kỳ, đánh giá sự tiến bộ của học sinh, trong đó kết quả Học kỳ 2 có vai trò quyết định mức độ phát triển cả năm.</p>
-                <p style="margin-top:8px; font-style:italic; color:#475569;">💡 Lưu ý: Hệ thống phần mềm đóng vai trò hỗ trợ thống kê dữ liệu, Giáo viên chủ nhiệm (GVCN) xem xét toàn diện và quyết định kết quả đánh giá cuối cùng.</p>
+                <p style="margin-top:6px;"><strong>4. Xếp loại Cả Năm:</strong> Tổng hợp kết quả hai học kỳ, trong đó chú trọng kết quả học kỳ II để ghi nhận sự tiến bộ và nỗ lực rèn luyện của học sinh.</p>
+                <p style="margin-top:8px; font-style:italic; color:#475569;">💡 Lưu ý: Hệ thống phần mềm đóng vai trò hỗ trợ thống kê dữ liệu, giáo viên chủ nhiệm xem xét toàn diện và quyết định kết quả đánh giá cuối cùng.</p>
             </div>
             <button onclick="document.getElementById('rulesModal').classList.remove('open')" class="btn-action" style="width:100%; margin-top:16px; background:#64748b; font-size:1rem;"><i class="fa-solid fa-check"></i> Đã hiểu rõ quy chế</button>
         </div>
@@ -791,9 +796,7 @@
             document.getElementById('seating-month-select').innerHTML = monthHTML;
             document.getElementById('public-detail-month-select').innerHTML = monthHTML;
             
-            let adminMonthHTML = "";
-            for(let m in MONTH_WEEKS) adminMonthHTML += `<option value="${m}">${m}</option>`;
-            document.getElementById('admin-month-summary-select').innerHTML = adminMonthHTML;
+            // Xóa Admin-month-summary-select vì đã gom chung vào admin-grading-period
 
             let stdHTML = '<option value="">-- Chọn học sinh --</option>';
             STATE.students.forEach((name, idx) => { stdHTML += `<option value="${idx+1}">STT ${idx+1} - ${name}</option>`; });
@@ -978,9 +981,8 @@
 
         window.exportToCSV = function() {
             let activeTab = document.querySelector(".view-panel.active").id;
-            let tableId = (activeTab === "panel-tab5") ? "monthly-summary-tbody" : "public-summary-tbody";
-            let tbody = document.getElementById(tableId);
-            if (!tbody || tbody.innerText.includes("Bấm")) return alert("Vui lòng xem kết quả trước khi xuất!");
+            let tbody = document.getElementById("public-summary-tbody");
+            if (!tbody || tbody.innerText.includes("Bấm") || tbody.innerText.includes("chưa chốt")) return alert("Vui lòng xem kết quả hợp lệ trước khi xuất!");
 
             let table = tbody.parentElement;
             let rows = table.querySelectorAll("tr");
@@ -1056,7 +1058,7 @@
                 if (mode === 'month') {
                     let month = periodKey;
                     let weeks = MONTH_WEEKS[month] || [];
-                    let thHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px;">Họ và Tên</th>`;
+                    let thHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px; text-align:left;">Họ và Tên</th>`;
                     weeks.forEach(w => thHTML += `<th>T${w}</th>`);
                     thHTML += `<th style="background:#fefce8; color:#a16207;">Điểm TB</th><th style="background:#eef2ff; color:#1e40af;">Xếp loại (Đã chốt)</th></tr>`;
                     thead.innerHTML = thHTML;
@@ -1107,15 +1109,18 @@
 
             let savedData = STATE.officialGrades[period] || {};
             
-            // Xây dựng Header động cho bảng (Hiển thị các tháng con nếu chọn Học Kỳ)
-            let thHTML = `<tr style="background:#fefce8; color:#b45309;"><th style="width:45px;">STT</th><th style="text-align:left;">Học sinh</th>`;
+            let isMonth = period.startsWith("Tháng");
+            let isSemester = period.startsWith("Học Kỳ");
+            let isYear = period === "Cả Năm";
             let subPeriods = [];
-            if(period === "Học Kỳ 1") subPeriods = ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
-            else if(period === "Học Kỳ 2") subPeriods = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"];
-            else if(period === "Cả Năm") subPeriods = ["Học Kỳ 1", "Học Kỳ 2"];
             
+            if (isMonth) subPeriods = MONTH_WEEKS[period].map(w => "Tuần " + w);
+            else if (isSemester) subPeriods = (period === "Học Kỳ 1") ? ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"] : ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"];
+            else if (isYear) subPeriods = ["Học Kỳ 1", "Học Kỳ 2"];
+            
+            let thHTML = `<tr style="background:#fefce8; color:#b45309;"><th style="width:45px;">STT</th><th style="text-align:left;">Học sinh</th>`;
             subPeriods.forEach(sp => {
-                let shortSp = sp.replace("Tháng ", "T").replace("Học Kỳ ", "HK");
+                let shortSp = sp.replace("Tháng ", "T").replace("Học Kỳ ", "HK").replace("Tuần ", "Tuần ");
                 thHTML += `<th>${shortSp}</th>`;
             });
             thHTML += `<th style="width:110px;">Cột gợi ý</th><th style="width:140px;">Xếp loại (GVCN chốt)</th></tr>`;
@@ -1126,19 +1131,26 @@
                 let suggestedGrade = "";
                 let tdSubPeriods = "";
                 
-                if(period.startsWith("Tháng")) {
+                if(isMonth) {
                     suggestedGrade = evaluateMonth(stt, period).grade;
-                } else if(period.startsWith("Học Kỳ")) {
+                    subPeriods.forEach(sp => {
+                        let weekData = STATE.emulation[sp] || {};
+                        let score = weekData[stt] !== undefined ? calculateScore(stt, weekData[stt]) : '--';
+                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600;">${score}</td>`;
+                    });
+                } else if(isSemester) {
                     suggestedGrade = evaluateSemester(stt, period);
                     subPeriods.forEach(sp => {
                         let g = getGradeForPeriod(stt, sp);
-                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600;">${g}</td>`;
+                        let color = g==='TỐT'?'#16a34a':(g==='KHÁ'?'#d97706':(g==='ĐẠT'?'#0284c7':(g==='CHƯA ĐẠT'?'#dc2626':'#94a3b8')));
+                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600; color:${color};">${g || '-'}</td>`;
                     });
-                } else if(period === "Cả Năm") {
+                } else if(isYear) {
                     suggestedGrade = evaluateYear(stt);
                     subPeriods.forEach(sp => {
                         let g = getGradeForPeriod(stt, sp);
-                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600;">${g}</td>`;
+                        let color = g==='TỐT'?'#16a34a':(g==='KHÁ'?'#d97706':(g==='ĐẠT'?'#0284c7':(g==='CHƯA ĐẠT'?'#dc2626':'#94a3b8')));
+                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600; color:${color};">${g || '-'}</td>`;
                     });
                 }
 
