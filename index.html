@@ -8,10 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- ============================================================ -->
-    <!-- BẢN QUYỀN THUỘC SỞ HỮU CHÍNH CHỦ: CÔ TRỊNH NGỌC ÁNH (BẮC NINH) -->
-    <!-- ============================================================ -->
-    <script> const MA_DU_LIEU = "11A5"; </script>
+    <script> const MA_DU_LIEU = "10A4"; </script>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -59,7 +56,7 @@
         th { background: #f8fafc; color: #1e3a8a; font-weight: 800; }
         td:nth-child(2) { text-align: left; font-weight: 700; color: #0f172a; min-width: 140px; }
 
-        .btn-action { background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: inline-flex; justify-content: center; align-items: center; gap: 6px; transition: background 0.2s;}
+        .btn-action { background: var(--primary); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: inline-flex; justify-content: center; align-items: center; gap: 6px; transition: background 0.2s; text-decoration: none;}
         .btn-action:hover { filter: brightness(1.1); }
         .form-group { margin-bottom: 10px; }
         .form-group label { display:block; font-size:0.75rem; font-weight:700; color:#334155; margin-bottom:4px; text-transform:uppercase;}
@@ -159,7 +156,6 @@
                     <div id="homeroom-announcements-container" style="display:flex; flex-direction:column;"></div>
                 </div>
 
-                <!-- BẢNG PHÂN CÔNG TRỰC NHẬT THEO NGÀY -->
                 <div style="background:#f0fdfa; border:1.5px solid #14b8a6; padding:12px; border-radius:10px; margin-bottom:14px; box-shadow:0 2px 6px rgba(20, 184, 166, 0.1);">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                         <h4 style="color:#0f766e; font-size:0.95rem; margin:0;"><i class="fa-solid fa-broom"></i> PHÂN CÔNG TRỰC NHẬT <span id="public-duty-week-label"></span></h4>
@@ -173,17 +169,17 @@
                 <!-- TRA CỨU HỒ SƠ THI ĐUA (ĐÃ CÂN ĐỐI KÍCH THƯỚC Ô) -->
                 <div style="background:#fff; border:1.5px solid #0ea5e9; padding:12px; border-radius:10px; margin-bottom:14px; box-shadow:0 2px 6px rgba(14, 165, 233, 0.1);">
                     <h4 style="color:#0369a1; font-size:0.95rem; margin-bottom:8px;"><i class="fa-solid fa-magnifying-glass"></i> TRA CỨU HỒ SƠ THI ĐUA</h4>
-                    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; align-items:center;">
-                        <select id="public-student-select" style="flex:2; min-width:200px; padding:8px; border-radius:8px; border:1px solid #bae6fd; font-weight:600;"></select>
-                        <select id="search-type-select" onchange="toggleSearchType()" style="flex:1; min-width:130px; padding:8px; border-radius:8px; font-weight:700; background:#f0f9ff; color:#0369a1;">
+                    <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                        <select id="public-student-select" style="width:70%; padding:8px; border-radius:8px; border:1px solid #bae6fd; font-weight:600;"></select>
+                        <select id="search-type-select" onchange="toggleSearchType()" style="width:30%; padding:8px; border-radius:8px; font-weight:700; background:#f0f9ff; color:#0369a1;">
                             <option value="week">Theo Tuần</option>
-                            <option value="month">Theo Tháng / Kỳ / Năm</option>
+                            <option value="month">Theo Tháng/Kỳ/Năm</option>
                         </select>
                     </div>
-                    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-                        <select id="public-detail-week-select" style="flex:2; min-width:150px; padding:8px; border-radius:8px; font-weight:600;"></select>
-                        <select id="public-detail-month-select" style="flex:2; min-width:150px; padding:8px; border-radius:8px; font-weight:600; display:none;"></select>
-                        <button class="btn-action" style="background:#0ea5e9; flex:1; padding:8px;" onclick="viewStudentDetails()"><i class="fa-solid fa-search"></i> Tra cứu</button>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <select id="public-detail-week-select" style="width:70%; padding:8px; border-radius:8px; font-weight:600;"></select>
+                        <select id="public-detail-month-select" style="width:70%; padding:8px; border-radius:8px; font-weight:600; display:none;"></select>
+                        <button class="btn-action" style="background:#0ea5e9; width:30%; padding:8px;" onclick="viewStudentDetails()"><i class="fa-solid fa-search"></i> Tra cứu</button>
                     </div>
                     <div id="student-detail-report" style="background:#f0f9ff; margin-top:8px; padding:10px; border-radius:8px; border:1px dashed #7dd3fc; display:none; font-size:0.85rem;"></div>
                 </div>
@@ -365,13 +361,8 @@
                     <div id="admin-grading-editor-container" style="display:none;">
                         <div class="table-responsive" style="max-height:350px; background:#fff; border-radius:8px;">
                             <table>
-                                <thead>
-                                    <tr style="background:#fef3c7; color:#b45309;">
-                                        <th style="width:45px;">STT</th>
-                                        <th style="text-align:left;">Học sinh</th>
-                                        <th style="width:130px;">Cột gợi ý</th>
-                                        <th style="width:160px;">Xếp loại (GVCN chỉnh sửa)</th>
-                                    </tr>
+                                <thead id="admin-grading-editor-thead">
+                                    <!-- Dynamic header based on period -->
                                 </thead>
                                 <tbody id="admin-grading-editor-tbody"></tbody>
                             </table>
@@ -385,7 +376,7 @@
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
                         <h4 style="color:#86198f; font-size:1.05rem; margin:0;"><i class="fa-solid fa-comment-sms"></i> TỔNG HỢP LỖI & SOẠN TIN NHẮN ZALO THEO TUẦN</h4>
                         <div style="display:flex; gap:6px; align-items:center;">
-                            <select id="admin-zalo-week-select" onchange="renderAdminZaloSummary()" style="padding:6px 10px; border-radius:6px; font-weight:700; border:1px solid #d946ef; color:#86198f; background:#fff;"></select>
+                            <select id="admin-zalo-week-select" style="padding:6px 10px; border-radius:6px; font-weight:700; border:1px solid #d946ef; color:#86198f; background:#fff;"></select>
                             <button class="btn-action" style="background:#d946ef; padding:6px 12px; font-size:0.78rem;" onclick="renderAdminZaloSummary()"><i class="fa-solid fa-rotate"></i> Tải danh sách</button>
                         </div>
                     </div>
@@ -403,23 +394,6 @@
                             <tbody id="admin-zalo-summary-tbody">
                                 <tr><td colspan="5" style="padding:12px; color:#701a75; font-style:italic;">Chọn tuần và bấm "Tải danh sách" ở trên...</td></tr>
                             </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div style="background:#f8fafc; border:1.5px solid #3b82f6; padding:12px; border-radius:10px; margin-bottom: 14px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-                        <h4 style="color:#1e40af; font-size:0.95rem; margin:0;"><i class="fa-solid fa-chart-line"></i> TỔNG KẾT ĐỊNH KỲ</h4>
-                        <div style="display:flex; gap:6px;">
-                            <select id="admin-month-summary-select" style="padding: 6px 8px; border-radius: 6px; font-weight: 700; border: 1px solid #3b82f6; width:auto;"></select>
-                            <button class="btn-action" style="background:#3b82f6; padding:6px 12px;" onclick="renderMonthlySummary()"><i class="fa-solid fa-eye"></i> Xem</button>
-                            <button class="btn-action" style="background:#10b981; padding:6px 12px;" onclick="exportToCSV()"><i class="fa-solid fa-file-export"></i> Xuất Excel</button>
-                        </div>
-                    </div>
-                    <div class="table-responsive" style="margin-bottom:0; max-height:250px;">
-                        <table>
-                            <thead id="monthly-summary-thead"></thead>
-                            <tbody id="monthly-summary-tbody"><tr><td colspan="6" style="padding:10px; color:#64748b; font-style:italic;">Bấm "Xem" để tải bảng...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -514,8 +488,8 @@
         </div>
 
         <!-- BẢN QUYỀN CHUẨN DƯỚI CHÂN TRANG -->
-        <footer style="text-align:center; padding:12px 0; color:#94a3b8; font-size:0.7rem; font-weight:500;">
-            Bản quyền sở hữu cô giáo Trịnh Ngọc Ánh – GV THPT Tân Yên số 2, Bắc Ninh
+        <footer style="text-align:center; padding:12px 0; color:#94a3b8; font-size:0.75rem; font-weight:600;">
+            Bản quyền sở hữu cô giáo Trịnh Ngọc Ánh – GV THPT Tân Yên số 2 Bắc Ninh
         </footer>
     </div>
 
@@ -531,7 +505,7 @@
                     <p style="margin:0; font-weight:600; color:#92400e;">📌 NGUYÊN TẮC CHUNG: Mỗi học sinh có 100 điểm rèn luyện cơ bản mỗi tuần. Điểm số được điều chỉnh dựa trên kết quả thực hiện nội quy, các điểm cộng thành tích và điểm trừ vi phạm theo quy định chung của lớp.</p>
                 </div>
                 
-                <h5 style="color:#b91c1c; margin:10px 0 4px 0; font-weight:800; font-size:0.95rem; border-left:4px solid #b91c1c; padding-left:8px;">🔴 CÁC MỤC TRỪ ĐIỂM KỶ LUẬT:</h5>
+                <h5 style="color:#b91c1c; margin:10px 0 4px 0; font-weight:800; font-size:0.95rem; border-left:4px solid #b91c1c; padding-left:8px;">🔴 CÁC MỤC TRỪ ĐIỂM KỶ LUẬT (Vi phạm nhiều lần tính lũy tiến):</h5>
                 <ul style="padding-left:20px; margin-bottom:10px;">
                     <li><strong>Nghỉ học:</strong> Có phép: -20đ/buổi; Không phép: -50đ/buổi.</li>
                     <li><strong>Đi muộn:</strong> Dưới 3 phút: -10đ; Từ 3-5 phút: -20đ; Trên 5 phút: -30đ.</li>
@@ -563,8 +537,8 @@
                     <li><strong>CHƯA ĐẠT:</strong> Điểm trung bình dưới 50 điểm hoặc có vi phạm kỷ luật nghiêm trọng.</li>
                 </ul>
                 <p style="margin-top:6px;"><strong>3. Xếp loại Học Kỳ:</strong> Tổng hợp kết quả rèn luyện qua các tháng theo chuẩn quy định của nhà trường, đảm bảo quá trình phấn đấu liên tục.</p>
-                <p style="margin-top:6px;"><strong>4. Xếp loại Cả Năm:</strong> Tổng hợp kết quả hai học kỳ, trong đó chú trọng kết quả học kỳ II để ghi nhận sự tiến bộ và nỗ lực rèn luyện của học sinh.</p>
-                <p style="margin-top:8px; font-style:italic; color:#475569;">💡 Lưu ý: Hệ thống phần mềm đóng vai trò hỗ trợ thống kê dữ liệu, giáo viên chủ nhiệm xem xét và quyết định kết quả đánh giá cuối cùng.</p>
+                <p style="margin-top:6px;"><strong>4. Xếp loại Cả Năm:</strong> Tổng hợp kết quả hai học kỳ, đánh giá sự tiến bộ của học sinh, trong đó kết quả Học kỳ 2 có vai trò quyết định mức độ phát triển cả năm.</p>
+                <p style="margin-top:8px; font-style:italic; color:#475569;">💡 Lưu ý: Hệ thống phần mềm đóng vai trò hỗ trợ thống kê dữ liệu, Giáo viên chủ nhiệm (GVCN) xem xét toàn diện và quyết định kết quả đánh giá cuối cùng.</p>
             </div>
             <button onclick="document.getElementById('rulesModal').classList.remove('open')" class="btn-action" style="width:100%; margin-top:16px; background:#64748b; font-size:1rem;"><i class="fa-solid fa-check"></i> Đã hiểu rõ quy chế</button>
         </div>
@@ -952,6 +926,16 @@
             return totalPen;
         }
 
+        function getGradeForPeriod(stt, period) {
+            if (STATE.officialGrades[period] && STATE.officialGrades[period][stt]) {
+                return STATE.officialGrades[period][stt];
+            }
+            if (period.startsWith("Tháng")) return evaluateMonth(stt, period).grade;
+            if (period.startsWith("Học Kỳ")) return evaluateSemester(stt, period);
+            if (period === "Cả Năm") return evaluateYear(stt);
+            return "";
+        }
+
         function evaluateMonth(stt, monthName) {
             let weeks = MONTH_WEEKS[monthName] || [];
             if(weeks.length === 0) return { avg: 0, minW: 0, grade: "CHƯA ĐẠT" };
@@ -969,23 +953,22 @@
 
         function evaluateSemester(stt, semName) {
             let months = semName === "Học Kỳ 1" ? ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"] : ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"];
-            let mGrades = months.map(m => evaluateMonth(stt, m).grade);
+            let mGrades = months.map(m => getGradeForPeriod(stt, m));
             let totCount = mGrades.filter(g => g === "TỐT").length;
             let khaCount = mGrades.filter(g => g === "KHÁ").length;
             let datCount = mGrades.filter(g => g === "ĐẠT").length;
             let chuaDatCount = mGrades.filter(g => g === "CHƯA ĐẠT").length;
+            
             if (chuaDatCount > 0) return "CHƯA ĐẠT";
-            let nonTot = mGrades.filter(g => g !== "TỐT");
-            if (totCount >= 3 && nonTot.every(g => g === "KHÁ")) return "TỐT";
             if (totCount >= 3 && mGrades.every(g => g === "TỐT" || g === "KHÁ")) return "TỐT";
-            if ((totCount + khaCount) >= 3 && !mGrades.includes("CHƯA ĐẠT")) return "KHÁ";
+            if ((totCount + khaCount) >= 3 && mGrades.every(g => g !== "CHƯA ĐẠT")) return "KHÁ";
             if ((totCount + khaCount + datCount) >= 3 && chuaDatCount === 0) return "ĐẠT";
             return "ĐẠT";
         }
 
         function evaluateYear(stt) {
-            let sem1 = evaluateSemester(stt, "Học Kỳ 1");
-            let sem2 = evaluateSemester(stt, "Học Kỳ 2");
+            let sem1 = getGradeForPeriod(stt, "Học Kỳ 1");
+            let sem2 = getGradeForPeriod(stt, "Học Kỳ 2");
             if (sem2 === "CHƯA ĐẠT") return "CHƯA ĐẠT";
             if ((sem1 === "TỐT" && sem2 === "TỐT") || (sem1 === "KHÁ" && sem2 === "TỐT")) return "TỐT";
             if ((sem1 === "KHÁ" && sem2 === "KHÁ") || (sem1 === "TỐT" && sem2 === "KHÁ") || (sem1 === "ĐẠT" && sem2 === "KHÁ")) return "KHÁ";
@@ -1022,7 +1005,7 @@
             document.body.removeChild(link);
         }
 
-        // --- BẢNG CÔNG KHAI (CHỈ HIỆN ĐIỂM KHI ĐÃ NHẬP VÀ XẾP LOẠI KHI ĐÃ CHỐT) ---
+        // --- BẢNG CÔNG KHAI (CHỈ HIỂN THỊ KHI ĐÃ NHẬP / CHỐT) ---
         window.renderPublicSummaryTable = function() {
             const mode = document.getElementById("emulation-view-mode").value;
             const tbody = document.getElementById("public-summary-tbody");
@@ -1048,7 +1031,7 @@
                 });
 
                 if(!hasAnyData) {
-                    tbody.innerHTML = `<tr><td colspan="6" style="padding:15px; color:#64748b; font-style:italic;">Tuần này chưa có dữ liệu chấm điểm (chưa nhập hoặc chưa chốt).</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" style="padding:15px; color:#64748b; font-style:italic;">Tuần này chưa có dữ liệu chấm điểm (chưa nhập hoặc chưa nộp).</td></tr>`;
                     return;
                 }
 
@@ -1116,24 +1099,47 @@
         window.loadAdminGradingTable = function() {
             let period = document.getElementById("admin-grading-period").value;
             let editorContainer = document.getElementById("admin-grading-editor-container");
+            let thead = document.getElementById("admin-grading-editor-thead");
             let tbody = document.getElementById("admin-grading-editor-tbody");
+            
             tbody.innerHTML = "";
             editorContainer.style.display = "block";
 
             let savedData = STATE.officialGrades[period] || {};
+            
+            // Xây dựng Header động cho bảng (Hiển thị các tháng con nếu chọn Học Kỳ)
+            let thHTML = `<tr style="background:#fefce8; color:#b45309;"><th style="width:45px;">STT</th><th style="text-align:left;">Học sinh</th>`;
+            let subPeriods = [];
+            if(period === "Học Kỳ 1") subPeriods = ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+            else if(period === "Học Kỳ 2") subPeriods = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"];
+            else if(period === "Cả Năm") subPeriods = ["Học Kỳ 1", "Học Kỳ 2"];
+            
+            subPeriods.forEach(sp => {
+                let shortSp = sp.replace("Tháng ", "T").replace("Học Kỳ ", "HK");
+                thHTML += `<th>${shortSp}</th>`;
+            });
+            thHTML += `<th style="width:110px;">Cột gợi ý</th><th style="width:140px;">Xếp loại (GVCN chốt)</th></tr>`;
+            thead.innerHTML = thHTML;
 
             STATE.students.forEach((name, idx) => {
                 let stt = idx + 1;
                 let suggestedGrade = "";
-                let subInfo = "";
+                let tdSubPeriods = "";
+                
                 if(period.startsWith("Tháng")) {
-                    let res = evaluateMonth(stt, period);
-                    suggestedGrade = res.grade;
-                    subInfo = `(TB: ${res.avg}, Min: ${res.minW})`;
+                    suggestedGrade = evaluateMonth(stt, period).grade;
                 } else if(period.startsWith("Học Kỳ")) {
                     suggestedGrade = evaluateSemester(stt, period);
+                    subPeriods.forEach(sp => {
+                        let g = getGradeForPeriod(stt, sp);
+                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600;">${g}</td>`;
+                    });
                 } else if(period === "Cả Năm") {
                     suggestedGrade = evaluateYear(stt);
+                    subPeriods.forEach(sp => {
+                        let g = getGradeForPeriod(stt, sp);
+                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600;">${g}</td>`;
+                    });
                 }
 
                 let currentGrade = savedData[stt] || suggestedGrade;
@@ -1141,10 +1147,11 @@
                 tbody.innerHTML += `
                     <tr>
                         <td><strong>${stt}</strong></td>
-                        <td style="text-align:left;">${name} <br><small style="color:#64748b;">Gợi ý máy: ${suggestedGrade} ${subInfo}</small></td>
-                        <td><strong>${suggestedGrade}</strong></td>
+                        <td style="text-align:left;">${name}</td>
+                        ${tdSubPeriods}
+                        <td style="color:#1e40af; font-weight:bold;">${suggestedGrade}</td>
                         <td>
-                            <select id="grade-edit-${stt}" style="padding:5px; border-radius:6px; border:1px solid #d97706; font-weight:bold; color:#b45309; background:#fff;">
+                            <select id="grade-edit-${stt}" style="padding:4px; border-radius:6px; border:1px solid #d97706; font-weight:bold; color:#b45309; background:#fff; width:100%;">
                                 <option value="TỐT" ${currentGrade==='TỐT'?'selected':''}>TỐT</option>
                                 <option value="KHÁ" ${currentGrade==='KHÁ'?'selected':''}>KHÁ</option>
                                 <option value="ĐẠT" ${currentGrade==='ĐẠT'?'selected':''}>ĐẠT</option>
@@ -1171,34 +1178,8 @@
             });
 
             saveData('officialGrades', STATE.officialGrades);
-            alert(`Đã chốt và lưu thành công kết quả xếp loại ${period}! Dữ liệu đã sẵn sàng công khai ngoài bảng tổng hợp.`);
+            alert(`Đã chốt thành công kết quả xếp loại ${period}! Dữ liệu đã sẵn sàng công khai ngoài bảng tổng hợp.`);
             renderPublicSummaryTable();
-        }
-
-        window.renderMonthlySummary = function() {
-            const month = document.getElementById("admin-month-summary-select").value;
-            const weeks = MONTH_WEEKS[month] || [];
-            const thead = document.getElementById("monthly-summary-thead");
-            const tbody = document.getElementById("monthly-summary-tbody");
-            if(!tbody) return;
-            
-            let thHTML = `<tr><th style="width:35px;">STT</th><th style="min-width:140px; text-align:left;">Họ và Tên</th>`;
-            weeks.forEach(w => thHTML += `<th>T${w}</th>`);
-            thHTML += `<th style="background:#fefce8; color:#a16207;">Điểm TB</th><th style="background:#fffbeb; color:#b45309;">Thấp nhất</th><th style="background:#eef2ff; color:#1e40af;">Xếp Loại</th></tr>`;
-            thead.innerHTML = thHTML;
-
-            let list = STATE.students.map((name, idx) => {
-                let stt = idx + 1;
-                let res = evaluateMonth(stt, month);
-                let scores = weeks.map(w => calculateScore(stt, STATE.emulation["Tuần " + w]?.[stt]));
-                return { stt, name, scores, ...res };
-            }).sort((a,b) => b.avg - a.avg);
-
-            tbody.innerHTML = "";
-            list.forEach((item) => {
-                let tdScores = item.scores.map(s => `<td>${s}</td>`).join('');
-                tbody.innerHTML += `<tr><td><strong>${item.stt}</strong></td><td style="text-align:left;">${item.name}</td>${tdScores}<td style="background:#fefce8;"><strong>${item.avg}</strong></td><td style="background:#fffbeb;"><strong>${item.minW}</strong></td><td style="background:#eef2ff; font-weight:bold;">${item.grade}</td></tr>`;
-            });
         }
 
         window.renderAdminZaloSummary = function() {
@@ -1213,7 +1194,8 @@
                 let stt = idx + 1;
                 let phone = STATE.phones[stt] || "";
                 let studentData = dataWeek[stt] || {};
-                let total = calculateScore(stt, studentData);
+                let hasData = Object.keys(studentData).length > 0;
+                let total = hasData ? calculateScore(stt, studentData) : '--';
 
                 let violationList = [];
                 ERROR_TYPES.forEach(err => {
@@ -1228,17 +1210,17 @@
                 if(studentData.penalty_1_5x) violationList.push(`Phạt quá hạn 1.5x (-${studentData.penalty_1_5x}đ)`);
 
                 let violationText = violationList.length > 0 ? violationList.join(', ') : "Không có vi phạm, em hoàn thành rất tốt nhiệm vụ.";
-                let defaultMsg = `GVCN lớp ${STATE.config.className} xin thông báo kết quả ${week} của em ${name}: tổng điểm đạt ${total}đ. Chi tiết vi phạm: ${violationText}. Kính mong PH phối hợp cùng giáo viên nhắc nhở em. Trân trọng!`;
+                let defaultMsg = hasData ? `GVCN lớp ${STATE.config.className} xin thông báo kết quả ${week} của em ${name}: tổng điểm đạt ${total}đ. Chi tiết vi phạm: ${violationText}. Kính mong PH phối hợp cùng giáo viên nhắc nhở em. Trân trọng!` : `GVCN lớp ${STATE.config.className} xin thông báo: Tuần này em ${name} chưa có dữ liệu chấm điểm thi đua. Trân trọng!`;
 
-                let zaloBtn = phone ? `<button onclick="sendZaloMessage(${stt}, '${phone}')" class="btn-action" style="background:#0068ff; padding:5px 10px; font-size:0.75rem;"><i class="fa-solid fa-comment-sms"></i> Gửi Zalo</button>` : `<span style="color:#94a3b8; font-size:0.75rem; font-style:italic;">Chưa có SĐT</span>`;
+                let zaloBtn = phone ? `<a id="zalo-btn-${stt}" href="https://zalo.me/${phone}?text=${encodeURIComponent(defaultMsg)}" target="_blank" rel="noopener noreferrer" class="btn-action" style="background:#0068ff; padding:5px 10px; font-size:0.75rem; display:inline-block;"><i class="fa-solid fa-comment-sms"></i> Gửi Zalo</a>` : `<span style="color:#94a3b8; font-size:0.75rem; font-style:italic;">Chưa có SĐT</span>`;
 
                 tbody.innerHTML += `
                     <tr>
                         <td><strong>${stt}</strong></td>
                         <td style="text-align:left;">${name}</td>
-                        <td><strong style="color:${total<80?'#dc2626':'#16a34a'};">${total}đ</strong></td>
+                        <td><strong style="color:${total<80?'#dc2626':'#16a34a'};">${total}${total!=='--'?'đ':''}</strong></td>
                         <td style="text-align:left;">
-                            <textarea id="zalo-msg-${stt}" rows="2" style="width:100%; padding:6px; font-size:0.78rem; border-radius:6px; border:1px solid #cbd5e1; font-family:inherit;">${defaultMsg}</textarea>
+                            <textarea id="zalo-msg-${stt}" rows="2" oninput="updateZaloLink(${stt}, '${phone}')" style="width:100%; padding:6px; font-size:0.78rem; border-radius:6px; border:1px solid #cbd5e1; font-family:inherit;">${defaultMsg}</textarea>
                         </td>
                         <td>${zaloBtn}</td>
                     </tr>
@@ -1246,13 +1228,10 @@
             });
         }
 
-        window.sendZaloMessage = function(stt, phone) {
-            let txtArea = document.getElementById(`zalo-msg-${stt}`);
-            if(!txtArea) return alert("Không tìm thấy nội dung tin nhắn!");
-            let msg = txtArea.value.trim();
-            let encodedMsg = encodeURIComponent(msg);
-            let zaloUrl = `https://zalo.me/${phone}?text=${encodedMsg}`;
-            window.open(zaloUrl, '_blank');
+        window.updateZaloLink = function(stt, phone) {
+            let msg = document.getElementById(`zalo-msg-${stt}`).value.trim();
+            let btn = document.getElementById(`zalo-btn-${stt}`);
+            if(btn) btn.href = `https://zalo.me/${phone}?text=${encodeURIComponent(msg)}`;
         }
 
         window.openStudentDetailModal = function(stt, inputWeek = null) {
