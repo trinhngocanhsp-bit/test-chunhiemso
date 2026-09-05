@@ -8,9 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- ============================================================ -->
-    <!-- BẢN QUYỀN THUỘC SỞ HỮU CHÍNH CHỦ: CÔ TRỊNH NGỌC ÁNH (BẮC NINH) -->
-    <!-- ============================================================ -->
     <script> const MA_DU_LIEU = "11A5"; </script>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -159,7 +156,6 @@
                     <div id="homeroom-announcements-container" style="display:flex; flex-direction:column;"></div>
                 </div>
 
-                <!-- BẢNG PHÂN CÔNG TRỰC NHẬT THEO NGÀY -->
                 <div style="background:#f0fdfa; border:1.5px solid #14b8a6; padding:12px; border-radius:10px; margin-bottom:14px; box-shadow:0 2px 6px rgba(20, 184, 166, 0.1);">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                         <h4 style="color:#0f766e; font-size:0.95rem; margin:0;"><i class="fa-solid fa-broom"></i> PHÂN CÔNG TRỰC NHẬT <span id="public-duty-week-label"></span></h4>
@@ -170,7 +166,7 @@
                     <div id="public-duty-list" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
                 </div>
 
-                <!-- TRA CỨU HỒ SƠ THI ĐUA (ĐÃ CÂN ĐỐI KÍCH THƯỚC Ô LẠI) -->
+                <!-- TRA CỨU HỒ SƠ THI ĐUA -->
                 <div style="background:#fff; border:1.5px solid #0ea5e9; padding:12px; border-radius:10px; margin-bottom:14px; box-shadow:0 2px 6px rgba(14, 165, 233, 0.1);">
                     <h4 style="color:#0369a1; font-size:0.95rem; margin-bottom:8px;"><i class="fa-solid fa-magnifying-glass"></i> TRA CỨU HỒ SƠ THI ĐUA</h4>
                     <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
@@ -198,11 +194,9 @@
                             <select id="seating-week-select" onchange="renderSeatingMap()" style="padding: 4px; border-radius: 6px; font-weight: 700; border: 1px solid #3b82f6; width:auto;"></select>
                         </div>
                     </div>
-                    
                     <div class="seating-map-container">
                         <div class="seating-scroll-area">
                             <div class="seating-grid-wrapper" id="seating-map-grid-container"></div>
-                            
                             <div style="margin-top: 14px; text-align: center;">
                                 <div style="display:inline-block; min-width: 280px; background:#1e3a8a; color:#fff; padding: 8px 16px; border-radius: 6px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                     <i class="fa-solid fa-arrow-up mr-2" style="color:#fde047;"></i> <i class="fa-solid fa-chalkboard"></i> BẢNG LỚP
@@ -228,7 +222,6 @@
                         </select>
                         <select id="public-month-select" onchange="updateSummaryWeekOptions()" style="padding: 6px 8px; border-radius: 6px; border: 1px solid #3b82f6; width:auto;"></select>
                         <select id="public-week-select" onchange="renderPublicSummaryTable()" style="padding: 6px 8px; border-radius: 6px; border: 1px solid #3b82f6; width:auto;"></select>
-                        <button class="btn-action" style="background:#10b981; padding: 6px 12px; font-size:0.75rem;" onclick="exportToCSV()"><i class="fa-solid fa-file-excel"></i> Xuất Excel</button>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -362,10 +355,11 @@
                             </optgroup>
                         </select>
                         <button class="btn-action" style="background:#d97706;" onclick="loadAdminGradingTable()"><i class="fa-solid fa-table"></i> Tải bảng xếp loại</button>
+                        <button class="btn-action" style="background:#10b981; margin-left:auto;" onclick="exportAdminTableToCSV()"><i class="fa-solid fa-file-excel"></i> Xuất Excel</button>
                     </div>
                     <div id="admin-grading-editor-container" style="display:none;">
                         <div class="table-responsive" style="max-height:400px; background:#fff; border-radius:8px;">
-                            <table>
+                            <table id="admin-grading-table-export">
                                 <thead id="admin-grading-editor-thead">
                                     <!-- Tiêu đề sẽ được tạo tự động bởi JS -->
                                 </thead>
@@ -494,7 +488,7 @@
 
         <!-- BẢN QUYỀN CHUẨN DƯỚI CHÂN TRANG -->
         <footer style="text-align:center; padding:12px 0; color:#94a3b8; font-size:0.75rem; font-weight:600;">
-            Bản quyền sở hữu cô giáo Trịnh Ngọc Ánh – GV THPT Tân Yên số 2, Bắc Ninh
+            Bản quyền sở hữu cô giáo Trịnh Ngọc Ánh – GV THPT Tân Yên số 2 Bắc Ninh
         </footer>
     </div>
 
@@ -543,7 +537,7 @@
                 </ul>
                 <p style="margin-top:6px;"><strong>3. Xếp loại Học Kỳ:</strong> Tổng hợp kết quả rèn luyện qua các tháng theo chuẩn quy định của nhà trường, đảm bảo quá trình phấn đấu liên tục.</p>
                 <p style="margin-top:6px;"><strong>4. Xếp loại Cả Năm:</strong> Tổng hợp kết quả hai học kỳ, trong đó chú trọng kết quả học kỳ II để ghi nhận sự tiến bộ và nỗ lực rèn luyện của học sinh.</p>
-                <p style="margin-top:8px; font-style:italic; color:#475569;">💡 Lưu ý: Hệ thống phần mềm đóng vai trò hỗ trợ thống kê dữ liệu, giáo viên chủ nhiệm xem xét toàn diện và quyết định kết quả đánh giá cuối cùng.</p>
+                <p style="margin-top:8px; font-style:italic; color:#475569;">💡 Lưu ý: Hệ thống phần mềm đóng vai trò hỗ trợ thống kê dữ liệu, giáo viên chủ nhiệm xem xét và quyết định kết quả đánh giá cuối cùng.</p>
             </div>
             <button onclick="document.getElementById('rulesModal').classList.remove('open')" class="btn-action" style="width:100%; margin-top:16px; background:#64748b; font-size:1rem;"><i class="fa-solid fa-check"></i> Đã hiểu rõ quy chế</button>
         </div>
@@ -796,7 +790,18 @@
             document.getElementById('seating-month-select').innerHTML = monthHTML;
             document.getElementById('public-detail-month-select').innerHTML = monthHTML;
             
-            // Xóa Admin-month-summary-select vì đã gom chung vào admin-grading-period
+            let adminMonthHTML = "";
+            for(let m in MONTH_WEEKS) adminMonthHTML += `<option value="${m}">${m}</option>`;
+            document.getElementById('admin-grading-period').innerHTML = `
+                <optgroup label="Xếp Loại Tháng">
+                    <option value="Tháng 9">Tháng 9</option><option value="Tháng 10">Tháng 10</option><option value="Tháng 11">Tháng 11</option>
+                    <option value="Tháng 12">Tháng 12</option><option value="Tháng 1">Tháng 1</option><option value="Tháng 2">Tháng 2</option>
+                    <option value="Tháng 3">Tháng 3</option><option value="Tháng 4">Tháng 4</option><option value="Tháng 5">Tháng 5</option>
+                </optgroup>
+                <optgroup label="Xếp Loại Học Kỳ & Năm">
+                    <option value="Học Kỳ 1">Học Kỳ 1</option><option value="Học Kỳ 2">Học Kỳ 2</option><option value="Cả Năm">Cả Năm</option>
+                </optgroup>
+            `;
 
             let stdHTML = '<option value="">-- Chọn học sinh --</option>';
             STATE.students.forEach((name, idx) => { stdHTML += `<option value="${idx+1}">STT ${idx+1} - ${name}</option>`; });
@@ -929,6 +934,36 @@
             return totalPen;
         }
 
+        function getValidScoresForMonth(stt, monthName) {
+            let weeks = MONTH_WEEKS[monthName] || [];
+            let validScores = [];
+            weeks.forEach(w => {
+                let weekKey = "Tuần " + w;
+                let wd = STATE.emulation[weekKey];
+                if (wd && (wd['loptruong_submitted'] || wd['to1_submitted'] || wd['to2_submitted'] || wd['to3_submitted'] || wd['to4_submitted'])) {
+                    validScores.push(calculateScore(stt, wd[stt]));
+                }
+            });
+            return validScores;
+        }
+
+        function evaluateMonth(stt, monthName) {
+            let scores = getValidScoresForMonth(stt, monthName);
+            if (scores.length === 0) return { avg: '--', minW: '--', grade: "--" };
+            
+            let sum = scores.reduce((a,b)=>a+b, 0);
+            let avg = sum / scores.length;
+            let minW = Math.min(...scores);
+            let grade = "CHƯA ĐẠT";
+
+            if (avg >= 90 && minW >= 80) grade = "TỐT";
+            else if (avg >= 80 && minW >= 65) grade = "KHÁ";
+            else if (avg >= 50) grade = "ĐẠT";
+            else grade = "CHƯA ĐẠT";
+
+            return { avg: parseFloat(avg.toFixed(1)), minW, grade };
+        }
+
         function getGradeForPeriod(stt, period) {
             if (STATE.officialGrades[period] && STATE.officialGrades[period][stt]) {
                 return STATE.officialGrades[period][stt];
@@ -936,33 +971,23 @@
             if (period.startsWith("Tháng")) return evaluateMonth(stt, period).grade;
             if (period.startsWith("Học Kỳ")) return evaluateSemester(stt, period);
             if (period === "Cả Năm") return evaluateYear(stt);
-            return "";
-        }
-
-        function evaluateMonth(stt, monthName) {
-            let weeks = MONTH_WEEKS[monthName] || [];
-            if(weeks.length === 0) return { avg: 0, minW: 0, grade: "CHƯA ĐẠT" };
-            let scores = weeks.map(w => calculateScore(stt, STATE.emulation["Tuần " + w]?.[stt]));
-            let sum = scores.reduce((a,b)=>a+b, 0);
-            let avg = sum / weeks.length;
-            let minW = Math.min(...scores);
-            let grade = "CHƯA ĐẠT";
-            if (avg >= 90 && minW >= 80) grade = "TỐT";
-            else if (avg >= 80 && minW >= 65) grade = "KHÁ";
-            else if (avg >= 50) grade = "ĐẠT";
-            else grade = "CHƯA ĐẠT";
-            return { avg: parseFloat(avg.toFixed(1)), minW, grade };
+            return "--";
         }
 
         function evaluateSemester(stt, semName) {
             let months = semName === "Học Kỳ 1" ? ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"] : ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"];
-            let mGrades = months.map(m => getGradeForPeriod(stt, m));
+            let mGrades = months.map(m => getGradeForPeriod(stt, m)).filter(g => g !== "" && g !== "--");
+            
+            if (mGrades.length === 0) return "--";
+
             let totCount = mGrades.filter(g => g === "TỐT").length;
             let khaCount = mGrades.filter(g => g === "KHÁ").length;
             let datCount = mGrades.filter(g => g === "ĐẠT").length;
             let chuaDatCount = mGrades.filter(g => g === "CHƯA ĐẠT").length;
             
             if (chuaDatCount > 0) return "CHƯA ĐẠT";
+            let nonTot = mGrades.filter(g => g !== "TỐT");
+            if (totCount >= 3 && nonTot.every(g => g === "KHÁ")) return "TỐT";
             if (totCount >= 3 && mGrades.every(g => g === "TỐT" || g === "KHÁ")) return "TỐT";
             if ((totCount + khaCount) >= 3 && mGrades.every(g => g !== "CHƯA ĐẠT")) return "KHÁ";
             if ((totCount + khaCount + datCount) >= 3 && chuaDatCount === 0) return "ĐẠT";
@@ -972,6 +997,7 @@
         function evaluateYear(stt) {
             let sem1 = getGradeForPeriod(stt, "Học Kỳ 1");
             let sem2 = getGradeForPeriod(stt, "Học Kỳ 2");
+            if (!sem1 || sem1 === "--" || !sem2 || sem2 === "--") return "--";
             if (sem2 === "CHƯA ĐẠT") return "CHƯA ĐẠT";
             if ((sem1 === "TỐT" && sem2 === "TỐT") || (sem1 === "KHÁ" && sem2 === "TỐT")) return "TỐT";
             if ((sem1 === "KHÁ" && sem2 === "KHÁ") || (sem1 === "TỐT" && sem2 === "KHÁ") || (sem1 === "ĐẠT" && sem2 === "KHÁ")) return "KHÁ";
@@ -981,16 +1007,22 @@
 
         window.exportToCSV = function() {
             let activeTab = document.querySelector(".view-panel.active").id;
-            let tbody = document.getElementById("public-summary-tbody");
-            if (!tbody || tbody.innerText.includes("Bấm") || tbody.innerText.includes("chưa chốt")) return alert("Vui lòng xem kết quả hợp lệ trước khi xuất!");
+            let tableId = (activeTab === "panel-tab5") ? "admin-grading-table-export" : "public-summary-tbody";
+            let tbody = document.getElementById(tableId);
+            if (!tbody || tbody.innerText.includes("Bấm") || tbody.innerText.includes("chưa chốt") || tbody.innerText.includes("Chưa nhập")) return alert("Vui lòng tải bảng kết quả hợp lệ trước khi xuất!");
 
-            let table = tbody.parentElement;
+            let table = tbody.tagName === "TABLE" ? tbody : tbody.parentElement;
             let rows = table.querySelectorAll("tr");
             let csvContent = "\uFEFF"; 
             rows.forEach(row => {
                 let rowData = [];
                 row.querySelectorAll("th, td").forEach(cell => {
-                    let text = cell.innerText.replace(/"/g, '""');
+                    let text = "";
+                    if(cell.querySelector("select")) {
+                        text = cell.querySelector("select").value;
+                    } else {
+                        text = cell.innerText.replace(/"/g, '""');
+                    }
                     rowData.push(`"${text}"`);
                 });
                 csvContent += rowData.join(",") + "\n";
@@ -1007,7 +1039,39 @@
             document.body.removeChild(link);
         }
 
-        // --- BẢNG CÔNG KHAI (CHỈ HIỂN THỊ KHI ĐÃ NHẬP / CHỐT) ---
+        window.exportAdminTableToCSV = function() {
+            let table = document.getElementById("admin-grading-table-export");
+            if (!table || table.innerText.trim() === "") return alert("Vui lòng tải bảng trước khi xuất!");
+            let rows = table.querySelectorAll("tr");
+            let csvContent = "\uFEFF"; 
+            rows.forEach(row => {
+                let rowData = [];
+                row.querySelectorAll("th, td").forEach(cell => {
+                    let text = "";
+                    if(cell.querySelector("select")) {
+                        text = cell.querySelector("select").value;
+                    } else {
+                        let tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = cell.innerHTML.split("<br>")[0]; 
+                        text = tempDiv.innerText.replace(/"/g, '""');
+                    }
+                    rowData.push(`"${text}"`);
+                });
+                csvContent += rowData.join(",") + "\n";
+            });
+            
+            let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            let url = URL.createObjectURL(blob);
+            let link = document.createElement("a");
+            link.setAttribute("href", url);
+            let filename = STATE.config.className + "_BangXepLoai_Admin.csv";
+            link.setAttribute("download", filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- BẢNG CÔNG KHAI (CHỈ HIỆN ĐIỂM KHI ĐÃ NHẬP VÀ XẾP LOẠI KHI ĐÃ CHỐT) ---
         window.renderPublicSummaryTable = function() {
             const mode = document.getElementById("emulation-view-mode").value;
             const tbody = document.getElementById("public-summary-tbody");
@@ -1058,19 +1122,29 @@
                 if (mode === 'month') {
                     let month = periodKey;
                     let weeks = MONTH_WEEKS[month] || [];
-                    let thHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px; text-align:left;">Họ và Tên</th>`;
+                    let thHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px;">Họ và Tên</th>`;
                     weeks.forEach(w => thHTML += `<th>T${w}</th>`);
                     thHTML += `<th style="background:#fefce8; color:#a16207;">Điểm TB</th><th style="background:#eef2ff; color:#1e40af;">Xếp loại (Đã chốt)</th></tr>`;
                     thead.innerHTML = thHTML;
 
                     STATE.students.forEach((name, idx) => {
                         let stt = idx + 1;
-                        let grade = finalizedData[stt] || "CHƯA ĐẠT";
-                        let scores = weeks.map(w => calculateScore(stt, STATE.emulation["Tuần " + w]?.[stt]));
-                        let sum = scores.reduce((a,b)=>a+b, 0);
-                        let avg = (sum / (weeks.length||1)).toFixed(1);
-                        let tdScores = scores.map(s => `<td>${s}</td>`).join('');
-                        let badgeColor = grade === 'TỐT' ? '#16a34a' : (grade === 'KHÁ' ? '#d97706' : (grade === 'ĐẠT' ? '#0284c7' : '#dc2626'));
+                        let grade = finalizedData[stt] || "--";
+                        
+                        let scores = getValidScoresForMonth(stt, month);
+                        let avg = "--";
+                        if (scores.length > 0) {
+                            let sum = scores.reduce((a,b)=>a+b, 0);
+                            avg = (sum / scores.length).toFixed(1);
+                        }
+
+                        let tdScores = weeks.map(w => {
+                            let wd = STATE.emulation["Tuần " + w];
+                            let isSub = wd && (wd['loptruong_submitted'] || wd['to1_submitted'] || wd['to2_submitted'] || wd['to3_submitted'] || wd['to4_submitted']);
+                            return `<td>${isSub && wd[stt] !== undefined ? calculateScore(stt, wd[stt]) : '--'}</td>`;
+                        }).join('');
+                        
+                        let badgeColor = grade === 'TỐT' ? '#16a34a' : (grade === 'KHÁ' ? '#d97706' : (grade === 'ĐẠT' ? '#0284c7' : (grade === '--' ? '#94a3b8' : '#dc2626')));
                         
                         tbody.innerHTML += `<tr><td><strong>${stt}</strong></td><td style="text-align:left;">${name}</td>${tdScores}<td style="background:#fefce8;"><strong>${avg}</strong></td><td style="background:#eef2ff;"><strong style="color:${badgeColor}; font-size:1rem;">${grade}</strong></td></tr>`;
                     });
@@ -1081,7 +1155,7 @@
                     
                     STATE.students.forEach((name, idx) => {
                         let stt = idx + 1;
-                        tbody.innerHTML += `<tr><td><strong>${stt}</strong></td><td style="text-align:left;">${name}</td><td style="background:#eef2ff; font-weight:bold; color:#1e40af;">${hk1Data[stt]||'Chưa chốt'}</td><td style="background:#f0fdf4; font-weight:bold; color:#166534;">${hk2Data[stt]||'Chưa chốt'}</td></tr>`;
+                        tbody.innerHTML += `<tr><td><strong>${stt}</strong></td><td style="text-align:left;">${name}</td><td style="background:#eef2ff; font-weight:bold; color:#1e40af;">${hk1Data[stt]||'--'}</td><td style="background:#f0fdf4; font-weight:bold; color:#166534;">${hk2Data[stt]||'--'}</td></tr>`;
                     });
                 } else if (mode === 'year') {
                     thead.innerHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px; text-align:left;">Họ và Tên</th><th style="background:#fffbeb; color:#b45309; font-size:1rem;">Xếp Loại Cả Năm (Đã chốt)</th></tr>`;
@@ -1089,8 +1163,8 @@
                     
                     STATE.students.forEach((name, idx) => {
                         let stt = idx + 1;
-                        let g = yearData[stt] || 'Chưa chốt';
-                        let color = g === 'TỐT' ? '#16a34a' : (g === 'KHÁ' ? '#d97706' : '#dc2626');
+                        let g = yearData[stt] || '--';
+                        let color = g === 'TỐT' ? '#16a34a' : (g === 'KHÁ' ? '#d97706' : (g === '--' ? '#94a3b8' : '#dc2626'));
                         tbody.innerHTML += `<tr><td><strong>${stt}</strong></td><td style="text-align:left;">${name}</td><td style="background:#fffbeb;"><strong style="color:${color}; font-size:1.05rem;">${g}</strong></td></tr>`;
                     });
                 }
@@ -1128,14 +1202,15 @@
 
             STATE.students.forEach((name, idx) => {
                 let stt = idx + 1;
-                let suggestedGrade = "";
+                let suggestedGrade = "--";
                 let tdSubPeriods = "";
                 
                 if(isMonth) {
                     suggestedGrade = evaluateMonth(stt, period).grade;
                     subPeriods.forEach(sp => {
                         let weekData = STATE.emulation[sp] || {};
-                        let score = weekData[stt] !== undefined ? calculateScore(stt, weekData[stt]) : '--';
+                        let isSub = weekData['loptruong_submitted'] || weekData['to1_submitted'] || weekData['to2_submitted'] || weekData['to3_submitted'] || weekData['to4_submitted'];
+                        let score = (isSub && weekData[stt] !== undefined) ? calculateScore(stt, weekData[stt]) : '--';
                         tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600;">${score}</td>`;
                     });
                 } else if(isSemester) {
@@ -1143,14 +1218,14 @@
                     subPeriods.forEach(sp => {
                         let g = getGradeForPeriod(stt, sp);
                         let color = g==='TỐT'?'#16a34a':(g==='KHÁ'?'#d97706':(g==='ĐẠT'?'#0284c7':(g==='CHƯA ĐẠT'?'#dc2626':'#94a3b8')));
-                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600; color:${color};">${g || '-'}</td>`;
+                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600; color:${color};">${g || '--'}</td>`;
                     });
                 } else if(isYear) {
                     suggestedGrade = evaluateYear(stt);
                     subPeriods.forEach(sp => {
                         let g = getGradeForPeriod(stt, sp);
                         let color = g==='TỐT'?'#16a34a':(g==='KHÁ'?'#d97706':(g==='ĐẠT'?'#0284c7':(g==='CHƯA ĐẠT'?'#dc2626':'#94a3b8')));
-                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600; color:${color};">${g || '-'}</td>`;
+                        tdSubPeriods += `<td style="font-size:0.75rem; font-weight:600; color:${color};">${g || '--'}</td>`;
                     });
                 }
 
@@ -1164,6 +1239,7 @@
                         <td style="color:#1e40af; font-weight:bold;">${suggestedGrade}</td>
                         <td>
                             <select id="grade-edit-${stt}" style="padding:4px; border-radius:6px; border:1px solid #d97706; font-weight:bold; color:#b45309; background:#fff; width:100%;">
+                                <option value="--" ${currentGrade==='--'?'selected':''}>-- (Chưa xét) --</option>
                                 <option value="TỐT" ${currentGrade==='TỐT'?'selected':''}>TỐT</option>
                                 <option value="KHÁ" ${currentGrade==='KHÁ'?'selected':''}>KHÁ</option>
                                 <option value="ĐẠT" ${currentGrade==='ĐẠT'?'selected':''}>ĐẠT</option>
@@ -1206,20 +1282,24 @@
                 let stt = idx + 1;
                 let phone = STATE.phones[stt] || "";
                 let studentData = dataWeek[stt] || {};
-                let hasData = Object.keys(studentData).length > 0;
+                
+                let isSubmitted = dataWeek['loptruong_submitted'] || dataWeek['to1_submitted'] || dataWeek['to2_submitted'] || dataWeek['to3_submitted'] || dataWeek['to4_submitted'];
+                let hasData = isSubmitted && studentData !== undefined && Object.keys(studentData).length > 0;
                 let total = hasData ? calculateScore(stt, studentData) : '--';
 
                 let violationList = [];
-                ERROR_TYPES.forEach(err => {
-                    let count = studentData[err.key] || 0;
-                    if(count > 0) {
-                        if(err.pen === 'custom_add') violationList.push(`${err.label} (+${count}đ)`);
-                        else if(err.pen === 'custom_sub') violationList.push(`${err.label} (-${count}đ)`);
-                        else if(err.pen < 0) violationList.push(`${err.label} (+${Math.abs(err.pen)*count}đ)`);
-                        else violationList.push(`${err.label} (SL:${count} / -${calculatePenalty(err.pen, count)}đ)`);
-                    }
-                });
-                if(studentData.penalty_1_5x) violationList.push(`Phạt quá hạn 1.5x (-${studentData.penalty_1_5x}đ)`);
+                if (hasData) {
+                    ERROR_TYPES.forEach(err => {
+                        let count = studentData[err.key] || 0;
+                        if(count > 0) {
+                            if(err.pen === 'custom_add') violationList.push(`${err.label} (+${count}đ)`);
+                            else if(err.pen === 'custom_sub') violationList.push(`${err.label} (-${count}đ)`);
+                            else if(err.pen < 0) violationList.push(`${err.label} (+${Math.abs(err.pen)*count}đ)`);
+                            else violationList.push(`${err.label} (SL:${count} / -${calculatePenalty(err.pen, count)}đ)`);
+                        }
+                    });
+                    if(studentData.penalty_1_5x) violationList.push(`Phạt quá hạn 1.5x (-${studentData.penalty_1_5x}đ)`);
+                }
 
                 let violationText = violationList.length > 0 ? violationList.join(', ') : "Không có vi phạm, em hoàn thành rất tốt nhiệm vụ.";
                 let defaultMsg = hasData ? `GVCN lớp ${STATE.config.className} xin thông báo kết quả ${week} của em ${name}: tổng điểm đạt ${total}đ. Chi tiết vi phạm: ${violationText}. Kính mong PH phối hợp cùng giáo viên nhắc nhở em. Trân trọng!` : `GVCN lớp ${STATE.config.className} xin thông báo: Tuần này em ${name} chưa có dữ liệu chấm điểm thi đua. Trân trọng!`;
