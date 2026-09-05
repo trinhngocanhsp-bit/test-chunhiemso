@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- ============================================================ -->
-    <!-- BẢN QUYỀN THUỘC SỞ HỮU CHÍNH CHỦ: CÔ GIÁP THỊ THƯ (BẮC NINH)    -->
+    <!-- BẢN QUYỀN THUỘC SỞ HỮU CHÍNH CHỦ: CÔ TRỊNH NGỌC ÁNH (BẮC NINH) -->
     <!-- ============================================================ -->
     <script> const MA_DU_LIEU = "11A5"; </script>
 
@@ -151,7 +151,7 @@
         <div id="panel-tab1" class="view-panel active">
             <div class="card">
                 <button onclick="document.getElementById('rulesModal').classList.add('open')" style="width: 100%; background: linear-gradient(135deg, #d97706, #b45309); color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: 800; margin-bottom:16px; cursor:pointer; font-size:0.9rem; box-shadow:0 2px 4px rgba(217, 119, 6, 0.3);">
-                    <i class="fa-solid fa-scale-balanced"></i> XEM QUY CHẾ CHẤM ĐIỂM THI ĐUA & XẾP LOẠI CHI TIẾT
+                    <i class="fa-solid fa-scale-balanced"></i> XEM QUY CHẾ ĐÁNH GIÁ THI ĐUA VÀ RÈN LUYỆN
                 </button>
 
                 <div style="margin-bottom: 14px;">
@@ -159,6 +159,7 @@
                     <div id="homeroom-announcements-container" style="display:flex; flex-direction:column;"></div>
                 </div>
 
+                <!-- BẢNG PHÂN CÔNG TRỰC NHẬT THEO NGÀY -->
                 <div style="background:#f0fdfa; border:1.5px solid #14b8a6; padding:12px; border-radius:10px; margin-bottom:14px; box-shadow:0 2px 6px rgba(20, 184, 166, 0.1);">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                         <h4 style="color:#0f766e; font-size:0.95rem; margin:0;"><i class="fa-solid fa-broom"></i> PHÂN CÔNG TRỰC NHẬT <span id="public-duty-week-label"></span></h4>
@@ -213,7 +214,7 @@
             </div>
         </div>
 
-        <!-- TAB 2: TỔNG HỢP ĐIỂM & XẾP LOẠI -->
+        <!-- TAB 2: TỔNG HỢP ĐIỂM & XẾP LOẠI (CHỈ HIỆN KHI ĐÃ NHẬP / CHỐT) -->
         <div id="panel-tab2" class="view-panel">
             <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
@@ -344,7 +345,7 @@
                     <button class="btn-action" style="background:#2563eb; width:100%;" onclick="saveConfigData()"><i class="fa-solid fa-floppy-disk"></i> Lưu cấu hình toàn hệ thống</button>
                 </div>
 
-                <!-- GVCN XẾP LOẠI ĐỊNH KỲ (CÓ CỘT GỢI Ý VÀ CHO PHÉP SỬA TRƯỚC KHI CHỐT) -->
+                <!-- KHU VỰC CHỐT & SỬA XẾP LOẠI ĐỊNH KỲ -->
                 <div style="background:#fffbeb; border:1.5px solid #d97706; padding:16px; border-radius:12px; margin-bottom: 14px; box-shadow:0 2px 8px rgba(217, 119, 6, 0.08);">
                     <h4 style="color:#b45309; font-size:1.05rem; margin-bottom:8px; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-lock"></i> GVCN XẾP LOẠI ĐỊNH KỲ</h4>
                     <p style="font-size:0.82rem; color:#92400e; margin-bottom:10px;">Chọn khoảng thời gian, bấm <strong>Tải bảng xếp loại</strong> để kiểm tra/chỉnh sửa trực tiếp kết quả theo cột gợi ý, sau đó bấm <strong>🔒 Chốt dữ liệu chính thức</strong> để công khai cho PH và học sinh xem.</p>
@@ -1021,7 +1022,7 @@
             document.body.removeChild(link);
         }
 
-        // --- BẢNG CÔNG KHAI (CHỈ HIỂN THỊ KHI ĐÃ NHẬP / CHỐT) ---
+        // --- BẢNG CÔNG KHAI (CHỈ HIỆN ĐIỂM KHI ĐÃ NHẬP VÀ XẾP LOẠI KHI ĐÃ CHỐT) ---
         window.renderPublicSummaryTable = function() {
             const mode = document.getElementById("emulation-view-mode").value;
             const tbody = document.getElementById("public-summary-tbody");
@@ -1047,7 +1048,7 @@
                 });
 
                 if(!hasAnyData) {
-                    tbody.innerHTML = `<tr><td colspan="6" style="padding:15px; color:#64748b; font-style:italic;">Tuần này chưa có dữ liệu chấm điểm.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="6" style="padding:15px; color:#64748b; font-style:italic;">Tuần này chưa có dữ liệu chấm điểm (chưa nhập hoặc chưa chốt).</td></tr>`;
                     return;
                 }
 
@@ -1065,7 +1066,7 @@
 
                 if (!finalizedData) {
                     thead.innerHTML = `<tr><th>Thông báo hệ thống</th></tr>`;
-                    tbody.innerHTML = `<tr><td style="padding:20px; color:#b91c1c; font-weight:bold; font-style:italic;"><i class="fa-solid fa-triangle-exclamation"></i> Giáo viên chủ nhiệm chưa "Chốt dữ liệu" xếp loại cho ${periodKey}.</td></tr>`;
+                    tbody.innerHTML = `<tr><td style="padding:20px; color:#b91c1c; font-weight:bold; font-style:italic;"><i class="fa-solid fa-triangle-exclamation"></i> Giáo viên chủ nhiệm chưa "Chốt dữ liệu" xếp loại cho ${periodKey}. Vui lòng quay lại sau!</td></tr>`;
                     return;
                 }
 
@@ -1124,19 +1125,26 @@
             STATE.students.forEach((name, idx) => {
                 let stt = idx + 1;
                 let suggestedGrade = "";
-                if(period.startsWith("Tháng")) suggestedGrade = evaluateMonth(stt, period).grade;
-                else if(period.startsWith("Học Kỳ")) suggestedGrade = evaluateSemester(stt, period);
-                else if(period === "Cả Năm") suggestedGrade = evaluateYear(stt);
+                let subInfo = "";
+                if(period.startsWith("Tháng")) {
+                    let res = evaluateMonth(stt, period);
+                    suggestedGrade = res.grade;
+                    subInfo = `(TB: ${res.avg}, Min: ${res.minW})`;
+                } else if(period.startsWith("Học Kỳ")) {
+                    suggestedGrade = evaluateSemester(stt, period);
+                } else if(period === "Cả Năm") {
+                    suggestedGrade = evaluateYear(stt);
+                }
 
                 let currentGrade = savedData[stt] || suggestedGrade;
 
                 tbody.innerHTML += `
                     <tr>
                         <td><strong>${stt}</strong></td>
-                        <td style="text-align:left;">${name}</td>
+                        <td style="text-align:left;">${name} <br><small style="color:#64748b;">Gợi ý máy: ${suggestedGrade} ${subInfo}</small></td>
                         <td><strong>${suggestedGrade}</strong></td>
                         <td>
-                            <select id="grade-edit-${stt}" style="padding:5px; border-radius:6px; border:1px solid #d97706; font-weight:bold; color:#b45309; background:#fff; width:100%;">
+                            <select id="grade-edit-${stt}" style="padding:5px; border-radius:6px; border:1px solid #d97706; font-weight:bold; color:#b45309; background:#fff;">
                                 <option value="TỐT" ${currentGrade==='TỐT'?'selected':''}>TỐT</option>
                                 <option value="KHÁ" ${currentGrade==='KHÁ'?'selected':''}>KHÁ</option>
                                 <option value="ĐẠT" ${currentGrade==='ĐẠT'?'selected':''}>ĐẠT</option>
@@ -1150,7 +1158,7 @@
 
         window.finalizeGradingPeriod = function() {
             let period = document.getElementById("admin-grading-period").value;
-            if(!confirm(`Xác nhận CHỐT VÀ LƯU dữ liệu chính thức cho ${period}?`)) return;
+            if(!confirm(`Xác nhận CHỐT VÀ LƯU dữ liệu chính thức cho ${period}? Sau khi chốt, phụ huynh và học sinh sẽ nhìn thấy kết quả này.`)) return;
 
             if(!STATE.officialGrades[period]) STATE.officialGrades[period] = {};
 
@@ -1163,7 +1171,7 @@
             });
 
             saveData('officialGrades', STATE.officialGrades);
-            alert(`Đã chốt thành công kết quả xếp loại ${period}! Dữ liệu đã sẵn sàng công khai ngoài bảng tổng hợp.`);
+            alert(`Đã chốt và lưu thành công kết quả xếp loại ${period}! Dữ liệu đã sẵn sàng công khai ngoài bảng tổng hợp.`);
             renderPublicSummaryTable();
         }
 
