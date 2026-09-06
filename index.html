@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sổ Chủ Nhiệm Điện Tử - Lớp 11A5</title>
+    <title>Sổ Chủ Nhiệm Điện Tử - Lớp 10A4</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
     <!-- ============================================================ -->
     <!-- BẢN QUYỀN THUỘC SỞ HỮU CHÍNH CHỦ: CÔ TRỊNH NGỌC ÁNH (BẮC NINH) -->
     <!-- ============================================================ -->
-    <script> const MA_DU_LIEU = "11A5"; </script>
+    <script> const MA_DU_LIEU = "10A4"; </script>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -235,6 +235,10 @@
                         </select>
                         <select id="public-month-select" onchange="window.updateSummaryWeekOptions()" style="padding: 6px 8px; border-radius: 6px; border: 1px solid #3b82f6; width:auto;"></select>
                         <select id="public-week-select" onchange="window.renderPublicSummaryTable()" style="padding: 6px 8px; border-radius: 6px; border: 1px solid #3b82f6; width:auto;"></select>
+                        <!-- NÚT XUẤT EXCEL -->
+                        <button class="btn-action" style="background:#10b981; padding: 6px 12px;" onclick="window.exportToCSV()">
+                            <i class="fa-solid fa-file-excel"></i> Xuất Excel
+                        </button>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -243,7 +247,7 @@
                         <tbody id="public-summary-tbody"></tbody>
                     </table>
                 </div>
-                <!-- THÊM GHI CHÚ CHO PHỤ HUYNH TẠI ĐÂY -->
+                <!-- GHI CHÚ CHO PHỤ HUYNH -->
                 <div style="text-align: center; padding: 12px; margin-top: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; color: #475569; font-style: italic; font-size: 0.85rem;">
                     <i class="fa-solid fa-circle-info"></i> Bảng tổng hợp này dành riêng cho Phụ huynh và Học sinh theo dõi kết quả. Toàn bộ dữ liệu tại đây đã được Giáo viên chủ nhiệm chốt và không thể chỉnh sửa.
                 </div>
@@ -256,7 +260,7 @@
                 <div style="background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 10px; padding: 14px;">
                     <h3 style="font-size: 0.95rem; color: #b91c1c; margin-bottom: 12px;"><i class="fa-solid fa-lock"></i> NHẬP LIỆU THI ĐUA (TỔ TRƯỞNG & LỚP TRƯỞNG)</h3>
                     
-                    <!-- THÊM KHỐI HIỂN THỊ THỜI GIAN VÀO ĐÂY -->
+                    <!-- HIỂN THỊ HẠN CHÓT -->
                     <div id="deadline-info-display" style="margin-bottom: 12px; padding: 10px 12px; background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 8px; font-size: 0.85rem; color: #1e40af; line-height: 1.6;">
                         <i class="fa-solid fa-spinner fa-spin"></i> Đang tải thông tin thời gian...
                     </div>
@@ -368,6 +372,8 @@
                     <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
                         <select id="admin-grading-period" style="padding:8px; border-radius:8px; border:1.5px solid #d97706; font-weight:bold; width:auto;"></select>
                         <button class="btn-action" style="background:#d97706;" onclick="window.loadAdminGradingTable()"><i class="fa-solid fa-table"></i> Tải bảng xếp loại</button>
+                        <!-- NÚT XUẤT EXCEL -->
+                        <button class="btn-action" style="background:#10b981;" onclick="window.exportAdminTableToCSV()"><i class="fa-solid fa-file-excel"></i> Xuất Excel</button>
                     </div>
                     <div id="admin-grading-editor-container" style="display:none;">
                         <div class="table-responsive" style="max-height:400px; background:#fff; border-radius:8px;">
@@ -1215,10 +1221,50 @@
                 reportContent = `<tr><td colspan="3" style="padding:15px; border:1px solid #000; text-align:center; font-style:italic;">Chưa có dữ liệu đánh giá nào được ghi nhận trong thời gian này.</td></tr>`;
             }
 
+            // Tạo Bảng thống kê theo Tháng (Chỉ hiện khi xem Kỳ/Năm)
+            let monthlySummaryHTML = "";
+            if (type === 'semester' || type === 'year') {
+                let months = type === 'semester' 
+                    ? (period === "Học Kỳ 1" ? ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"] : ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"]) 
+                    : ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"];
+
+                monthlySummaryHTML = `
+                <p style="font-weight:bold; font-size:16px; text-transform:uppercase; margin-bottom:8px;">1. TỔNG HỢP ĐIỂM SỐ & XẾP LOẠI CÁC THÁNG</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Tháng</th>
+                            <th>Chi tiết điểm các tuần</th>
+                            <th style="width: 25%;">Xếp loại Tháng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+                months.forEach(m => {
+                    let mGrade = getGradeForPeriod(stt, m);
+                    let weeks = MONTH_WEEKS[m] || [];
+                    let weekScores = weeks.map(w => {
+                        let weekKey = "Tuần " + w;
+                        let isSub = isStudentWeekSubmitted(stt, weekKey);
+                        let wd = STATE.emulation[weekKey] || {};
+                        let s = isSub ? calculateScore(stt, wd[stt]) : '--';
+                        return `T${w}: <strong>${s}</strong>`;
+                    }).join(' | ');
+
+                    monthlySummaryHTML += `<tr>
+                        <td style="padding:8px; border:1px solid #000; text-align:center;"><strong>${m}</strong></td>
+                        <td style="padding:8px; border:1px solid #000; text-align:center;">${weekScores}</td>
+                        <td style="padding:8px; border:1px solid #000; text-align:center; font-weight:bold; color:#1e40af;">${mGrade}</td>
+                    </tr>`;
+                });
+                monthlySummaryHTML += `</tbody></table>`;
+            }
+
             // Xử lý Hạnh kiểm & Xếp loại tổng
             let overviewHTML = "";
             let finalGrade = getGradeForPeriod(stt, period);
             let gradeLabel = (type === 'week') ? "ĐÁNH GIÁ TUẦN" : "XẾP LOẠI RÈN LUYỆN (HẠNH KIỂM)";
+            let reportSectionTitle = (type === 'semester' || type === 'year') ? "2. BẢNG KÊ CHI TIẾT ĐIỂM SỐ & VI PHẠM KỶ LUẬT" : "BẢNG KÊ CHI TIẾT ĐIỂM SỐ & VI PHẠM KỶ LUẬT";
 
             if (type === 'week') {
                 let wd = STATE.emulation[period] || {};
@@ -1253,6 +1299,9 @@
                     </div>
                 `;
             }
+
+            // Khắc phục lỗi in "Lớp: Lớp" bằng cách lọc sạch chữ lớp phía trước trong cấu hình
+            let classNameClean = STATE.config.className.replace(/^lớp\s*/i, '');
 
             let printWindow = window.open('', '_blank');
             if(!printWindow) return alert("Vui lòng cho phép trình duyệt mở tab mới (Pop-up) để xem phiếu báo cáo!");
@@ -1304,13 +1353,15 @@
                     
                     <div style="font-size: 16px; margin-bottom: 20px; line-height: 1.8;">
                         Họ và tên học sinh: <strong>${name}</strong><br>
-                        Lớp: <strong>${STATE.config.className}</strong><br>
+                        Lớp: <strong>${classNameClean}</strong><br>
                         Giáo viên chủ nhiệm: <strong>${STATE.config.teacherName}</strong>
                     </div>
 
                     ${overviewHTML}
+                    
+                    ${monthlySummaryHTML}
 
-                    <p style="font-weight:bold; font-size:16px; text-transform:uppercase; margin-bottom:8px;">BẢNG KÊ CHI TIẾT ĐIỂM SỐ & VI PHẠM KỶ LUẬT</p>
+                    <p style="font-weight:bold; font-size:16px; text-transform:uppercase; margin-bottom:8px;">${reportSectionTitle}</p>
                     <table>
                         <thead>
                             <tr>
