@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sổ Chủ Nhiệm Điện Tử - Lớp 11A5</title>
+    <title>Sổ Chủ Nhiệm Điện Tử </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -254,7 +254,7 @@
             </div>
         </div>
 
-        <!-- TAB 3: NHẬP ĐIỂM THI ĐUA -->
+        <!-- TAB 3: NHẬP LIỆU THI ĐUA -->
         <div id="panel-tab3" class="view-panel">
             <div class="card">
                 <div style="background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 10px; padding: 14px;">
@@ -372,7 +372,7 @@
                     <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
                         <select id="admin-grading-period" style="padding:8px; border-radius:8px; border:1.5px solid #d97706; font-weight:bold; width:auto;"></select>
                         <button class="btn-action" style="background:#d97706;" onclick="window.loadAdminGradingTable()"><i class="fa-solid fa-table"></i> Tải bảng xếp loại</button>
-                        <!-- NÚT XUẤT EXCEL -->
+                        <button class="btn-action" style="background:#3b82f6;" onclick="window.syncSuggestedGrades()"><i class="fa-solid fa-wand-magic-sparkles"></i> Áp dụng gợi ý</button>
                         <button class="btn-action" style="background:#10b981;" onclick="window.exportAdminTableToCSV()"><i class="fa-solid fa-file-excel"></i> Xuất Excel</button>
                     </div>
                     <div id="admin-grading-editor-container" style="display:none;">
@@ -430,7 +430,8 @@
                     </div>
                     <div class="search-controls" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                         <select id="admin-print-period" style="flex:2; min-width:150px; padding:8px; border-radius:8px; font-weight:600;"></select>
-                        <button class="btn-action" style="background:#8b5cf6; flex:1; min-width:150px; padding:8px;" onclick="window.exportStudentReport()"><i class="fa-solid fa-file-export"></i> Xuất File Báo Cáo</button>
+                        <button class="btn-action" style="background:#8b5cf6; flex:1; min-width:120px; padding:8px;" onclick="window.exportStudentReport()"><i class="fa-solid fa-user"></i> Xuất Cá Nhân</button>
+                        <button class="btn-action" style="background:#6d28d9; flex:1; min-width:120px; padding:8px;" onclick="window.exportAllStudentsReport()"><i class="fa-solid fa-layer-group"></i> Xuất Cả Lớp</button>
                     </div>
                 </div>
 
@@ -1054,7 +1055,7 @@
         }
 
         function getGradeForPeriod(stt, period) {
-            if (STATE.officialGrades[period] && STATE.officialGrades[period][stt]) {
+            if (STATE.officialGrades[period] && STATE.officialGrades[period][stt] && STATE.officialGrades[period][stt] !== "--") {
                 return STATE.officialGrades[period][stt];
             }
             if (period.startsWith("Tháng")) return evaluateMonth(stt, period).grade;
@@ -1160,14 +1161,10 @@
         // ==========================================
         // XUẤT PHIẾU BÁO CÁO KỶ LUẬT GỬI PH (CỰC CHI TIẾT)
         // ==========================================
-        window.exportStudentReport = function() {
-            let stt = document.getElementById("admin-print-student").value;
-            if(!stt) return alert("Vui lòng chọn học sinh!");
-            let type = document.getElementById("admin-print-type").value;
-            let period = document.getElementById("admin-print-period").value;
+        function getStudentReportHTML(stt, type, period) {
             let name = STATE.students[stt - 1];
-            
             let targetWeeks = [];
+            
             if(type === 'week') targetWeeks = [period];
             else if(type === 'month') targetWeeks = (MONTH_WEEKS[period] || []).map(w => "Tuần " + w);
             else if(type === 'semester') {
@@ -1306,39 +1303,8 @@
 
             let classNameClean = STATE.config.className.replace(/lớp/ig, '').trim();
 
-            let printWindow = window.open('', '_blank');
-            if(!printWindow) return alert("Vui lòng cho phép trình duyệt mở tab mới (Pop-up) để xem phiếu báo cáo!");
-            
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Báo Cáo Kỷ Luật - ${name}</title>
-                    <style>
-                        body { font-family: 'Times New Roman', serif; padding: 30px; color: #000; line-height: 1.5; max-width: 900px; margin: 0 auto; }
-                        .header { display: flex; justify-content: space-between; margin-bottom: 25px; text-align: center; }
-                        .school-info, .national-title { font-weight: bold; font-size: 14px; }
-                        .title { text-align: center; font-size: 22px; font-weight: bold; margin: 15px 0; text-transform: uppercase; }
-                        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-                        th, td { border: 1px solid #000; padding: 10px; font-size: 15px; }
-                        th { background-color: #f2f2f2; text-align:center; font-weight:bold; }
-                        .footer { display: flex; justify-content: space-between; margin-top: 40px; text-align: center; font-size:15px; }
-                        .signature-box { width: 45%; }
-                        .no-print-bar { background: #eff6ff; border: 1px solid #3b82f6; padding: 15px; margin-bottom: 20px; border-radius: 8px; text-align: center; font-family: sans-serif; }
-                        .btn-save { background: #2563eb; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; text-transform:uppercase; }
-                        @media print { 
-                            .no-print-bar { display: none !important; } 
-                            body { padding: 0; max-width: 100%; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="no-print-bar">
-                        <span style="font-size:15px; margin-right:12px;">💡 Mẹo: Bấm nút bên cạnh, chọn mục Máy in (Destination) là <strong>"Lưu dưới dạng PDF" (Save as PDF)</strong> để tạo file gửi Phụ huynh:</span>
-                        <button class="btn-save" onclick="window.print()">📥 TẢI XUỐNG FILE PDF</button>
-                    </div>
-
+            return `
+                <div class="page-break">
                     <div class="header">
                         <div class="school-info">
                             SỞ GD&ĐT BẮC NINH<br>
@@ -1389,6 +1355,47 @@
                             <strong>${STATE.config.teacherName}</strong>
                         </div>
                     </div>
+                </div>
+            `;
+        }
+
+        function openPDFPrintWindow(contentHTML, titleName) {
+            let printWindow = window.open('', '_blank');
+            if(!printWindow) return alert("Vui lòng cho phép trình duyệt mở tab mới (Pop-up) để xem phiếu báo cáo!");
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Báo Cáo - ${titleName}</title>
+                    <style>
+                        body { font-family: 'Times New Roman', serif; padding: 30px; color: #000; line-height: 1.5; max-width: 900px; margin: 0 auto; }
+                        .header { display: flex; justify-content: space-between; margin-bottom: 25px; text-align: center; }
+                        .school-info, .national-title { font-weight: bold; font-size: 14px; }
+                        .title { text-align: center; font-size: 22px; font-weight: bold; margin: 15px 0; text-transform: uppercase; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                        th, td { border: 1px solid #000; padding: 10px; font-size: 15px; }
+                        th { background-color: #f2f2f2; text-align:center; font-weight:bold; }
+                        .footer { display: flex; justify-content: space-between; margin-top: 40px; text-align: center; font-size:15px; }
+                        .signature-box { width: 45%; }
+                        .no-print-bar { background: #eff6ff; border: 1px solid #3b82f6; padding: 15px; margin-bottom: 20px; border-radius: 8px; text-align: center; font-family: sans-serif; }
+                        .btn-save { background: #2563eb; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; text-transform:uppercase; }
+                        .page-break { page-break-after: always; margin-bottom: 60px; padding-bottom: 20px; }
+                        .page-break:last-child { page-break-after: auto; margin-bottom: 0; }
+                        @media print { 
+                            .no-print-bar { display: none !important; } 
+                            body { padding: 0; max-width: 100%; }
+                            .page-break { margin-bottom: 0; padding-bottom: 0; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="no-print-bar">
+                        <span style="font-size:15px; margin-right:12px;">💡 Mẹo: Bấm nút bên cạnh, chọn mục Máy in (Destination) là <strong>"Lưu dưới dạng PDF" (Save as PDF)</strong> để tạo file gửi Phụ huynh:</span>
+                        <button class="btn-save" onclick="window.print()">📥 TẢI XUỐNG FILE PDF</button>
+                    </div>
+                    ${contentHTML}
                 </body>
                 </html>
             `);
@@ -1396,112 +1403,29 @@
             printWindow.focus();
         }
 
-        // ==========================================
-        // CÁC HÀM XỬ LÝ CÔNG KHAI
-        // ==========================================
-        window.renderPublicSummaryTable = function() {
-            const mode = document.getElementById("emulation-view-mode").value;
-            const tbody = document.getElementById("public-summary-tbody");
-            const thead = document.getElementById("public-summary-thead");
-            tbody.innerHTML = "";
+        window.exportStudentReport = function() {
+            let stt = document.getElementById("admin-print-student").value;
+            if(!stt) return alert("Vui lòng chọn học sinh!");
+            let type = document.getElementById("admin-print-type").value;
+            let period = document.getElementById("admin-print-period").value;
+            let name = STATE.students[stt - 1];
 
-            if (mode === 'week') {
-                const week = document.getElementById("public-week-select").value;
-                thead.innerHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px; text-align:left;">Họ và Tên</th><th>Chức vụ</th><th style="background:#eef2ff;">Tổng điểm tuần</th><th style="background:#fffbeb; color:#b45309;">Hạng</th><th>Chi Tiết</th></tr>`;
-                
-                let weekData = STATE.emulation[week] || {};
-                let hasAnyData = Object.keys(weekData).length > 0;
+            let htmlContent = getStudentReportHTML(stt, type, period);
+            openPDFPrintWindow(htmlContent, name);
+        }
 
-                let list = STATE.students.map((name, idx) => {
-                    let stt = idx + 1;
-                    let isSub = isStudentWeekSubmitted(stt, week);
-                    let total = isSub ? calculateScore(stt, weekData[stt]) : '--';
-                    return { stt, name, pos: STATE.positions[stt] || "-", total, isSub };
-                }).sort((a,b) => {
-                    if(a.total === '--') return 1;
-                    if(b.total === '--') return -1;
-                    return b.total - a.total;
-                });
+        window.exportAllStudentsReport = function() {
+            let type = document.getElementById("admin-print-type").value;
+            let period = document.getElementById("admin-print-period").value;
 
-                if(!hasAnyData) {
-                    tbody.innerHTML = `<tr><td colspan="6" style="padding:15px; color:#64748b; font-style:italic;">Tuần này chưa có dữ liệu chấm điểm (chưa nhập hoặc chưa nộp).</td></tr>`;
-                    return;
-                }
+            if(!confirm(`Bạn đang xuất phiếu báo cáo của TOÀN BỘ 45 HỌC SINH cho ${period}. Quá trình này sẽ tạo ra 1 file PDF dài 45 trang. Tiếp tục?`)) return;
 
-                list.forEach((item, i) => {
-                    let posTag = item.pos !== "-" ? `<span style="background:#f0fdf4; color:#166534; padding:3px 8px; border-radius:6px; font-size:0.75rem; border:1px solid #bbf7d0; font-weight:bold;">${item.pos}</span>` : "-";
-                    let scoreDisplay = item.total === '--' ? '<span style="color:#94a3b8; font-style:italic;">Chưa nhập</span>' : `<strong style="color:${item.total<80?'#dc2626':'#16a34a'}; font-size:1.05rem;">${item.total}</strong>`;
-                    let rankDisplay = item.total === '--' ? '-' : `<strong>#${i+1}</strong>`;
-                    let viewBtn = item.total === '--' ? '-' : `<button onclick="window.openStudentDetailModal(${item.stt}, '${week}')" class="btn-action" style="background:#0ea5e9; padding:4px 10px; font-size:0.75rem;"><i class="fa-solid fa-eye"></i> Xem</button>`;
-                    
-                    tbody.innerHTML += `<tr><td><strong>${item.stt}</strong></td><td style="text-align:left;">${item.name}</td><td>${posTag}</td><td style="background:#eef2ff;">${scoreDisplay}</td><td style="background:#fffbeb; color:#b45309;">${rankDisplay}</td><td>${viewBtn}</td></tr>`;
-                });
-            } else {
-                let periodKey = mode === 'month' ? document.getElementById("public-month-select").value : (mode === 'semester' ? "Học Kỳ 1" : "Cả Năm");
-                let finalizedData = STATE.officialGrades[periodKey];
+            let allHTMLContent = "";
+            STATE.students.forEach((name, idx) => {
+                allHTMLContent += getStudentReportHTML(idx + 1, type, period);
+            });
 
-                if (!finalizedData || Object.keys(finalizedData).length === 0) {
-                    thead.innerHTML = `<tr><th>Thông báo hệ thống</th></tr>`;
-                    tbody.innerHTML = `<tr><td style="padding:20px; color:#b91c1c; font-weight:bold; font-style:italic;"><i class="fa-solid fa-triangle-exclamation"></i> Giáo viên chủ nhiệm chưa "Chốt dữ liệu" xếp loại cho ${periodKey}. Vui lòng quay lại sau!</td></tr>`;
-                    return;
-                }
-
-                if (mode === 'month') {
-                    let month = periodKey;
-                    let weeks = MONTH_WEEKS[month] || [];
-                    let thHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px;">Họ và Tên</th>`;
-                    weeks.forEach(w => thHTML += `<th>T${w}</th>`);
-                    thHTML += `<th style="background:#fefce8; color:#a16207;">Điểm TB</th><th style="background:#eef2ff; color:#1e40af;">Xếp loại (Đã chốt)</th></tr>`;
-                    thead.innerHTML = thHTML;
-
-                    STATE.students.forEach((name, idx) => {
-                        let stt = idx + 1;
-                        let grade = finalizedData[stt] || "--";
-                        
-                        let scores = getValidScoresForMonth(stt, month);
-                        let avg = "--";
-                        if (scores.length > 0) {
-                            let sum = scores.reduce((a,b)=>a+b, 0);
-                            avg = (sum / scores.length).toFixed(1);
-                        }
-
-                        let tdScores = weeks.map(w => {
-                            let weekKey = "Tuần " + w;
-                            let isSub = isStudentWeekSubmitted(stt, weekKey);
-                            let wd = STATE.emulation[weekKey] || {};
-                            return `<td style="font-weight:600; color:${(!isSub || calculateScore(stt, wd[stt])<80)?'#dc2626':'#16a34a'}">${isSub ? calculateScore(stt, wd[stt]) : '--'}</td>`;
-                        }).join('');
-                        
-                        let badgeColor = grade === 'TỐT' ? '#16a34a' : (grade === 'KHÁ' ? '#d97706' : (grade === 'ĐẠT' ? '#0284c7' : (grade === '--' ? '#94a3b8' : '#dc2626')));
-                        
-                        tbody.innerHTML += `<tr><td><strong>${stt}</strong></td><td style="text-align:left;">${name}</td>${tdScores}<td style="background:#fefce8;"><strong>${avg}</strong></td><td style="background:#eef2ff;"><strong style="color:${badgeColor}; font-size:1rem;">${grade}</strong></td></tr>`;
-                    });
-                } else if (mode === 'semester') {
-                    thead.innerHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px; text-align:left;">Họ và Tên</th><th style="background:#eef2ff; color:#1e40af;">Học Kỳ 1 (Đã chốt)</th><th style="background:#f0fdf4; color:#166534;">Học Kỳ 2 (Đã chốt)</th></tr>`;
-                    let hk1Data = STATE.officialGrades["Học Kỳ 1"] || {};
-                    let hk2Data = STATE.officialGrades["Học Kỳ 2"] || {};
-                    
-                    STATE.students.forEach((name, idx) => {
-                        let stt = idx + 1;
-                        let g1 = hk1Data[stt] || '--';
-                        let c1 = g1==='TỐT'?'#16a34a':(g1==='KHÁ'?'#d97706':(g1==='ĐẠT'?'#0284c7':(g1==='--'?'#94a3b8':'#dc2626')));
-                        let g2 = hk2Data[stt] || '--';
-                        let c2 = g2==='TỐT'?'#16a34a':(g2==='KHÁ'?'#d97706':(g2==='ĐẠT'?'#0284c7':(g2==='--'?'#94a3b8':'#dc2626')));
-
-                        tbody.innerHTML += `<tr><td><strong>${stt}</strong></td><td style="text-align:left;">${name}</td><td style="background:#eef2ff; font-weight:bold; color:${c1};">${g1}</td><td style="background:#f0fdf4; font-weight:bold; color:${c2};">${g2}</td></tr>`;
-                    });
-                } else if (mode === 'year') {
-                    thead.innerHTML = `<tr><th style="width:40px;">STT</th><th style="min-width:140px; text-align:left;">Họ và Tên</th><th style="background:#fffbeb; color:#b45309; font-size:1rem;">Xếp Loại Cả Năm (Đã chốt)</th></tr>`;
-                    let yearData = STATE.officialGrades["Cả Năm"] || {};
-                    
-                    STATE.students.forEach((name, idx) => {
-                        let stt = idx + 1;
-                        let g = yearData[stt] || '--';
-                        let color = g === 'TỐT' ? '#16a34a' : (g === 'KHÁ' ? '#d97706' : (g === '--' ? '#94a3b8' : '#dc2626'));
-                        tbody.innerHTML += `<tr><td><strong>${stt}</strong></td><td style="text-align:left;">${name}</td><td style="background:#fffbeb;"><strong style="color:${color}; font-size:1.05rem;">${g}</strong></td></tr>`;
-                    });
-                }
-            }
+            openPDFPrintWindow(allHTMLContent, `Ca_Lop_${period}`);
         }
 
         window.loadAdminGradingTable = function() {
@@ -1561,14 +1485,14 @@
                     });
                 }
 
-                let currentGrade = savedData[stt] || suggestedGrade;
+                let currentGrade = (savedData[stt] && savedData[stt] !== '--') ? savedData[stt] : suggestedGrade;
 
                 tbody.innerHTML += `
                     <tr>
                         <td><strong>${stt}</strong></td>
                         <td style="text-align:left;">${name}</td>
                         ${tdSubPeriods}
-                        <td style="color:#1e40af; font-weight:bold;">${suggestedGrade}</td>
+                        <td id="suggested-grade-${stt}" style="color:#1e40af; font-weight:bold;">${suggestedGrade}</td>
                         <td>
                             <select id="grade-edit-${stt}" style="padding:4px; border-radius:6px; border:1px solid #d97706; font-weight:bold; color:#b45309; background:#fff; width:100%;">
                                 <option value="--" ${currentGrade==='--'?'selected':''}>-- (Chưa xét) --</option>
@@ -1580,6 +1504,18 @@
                         </td>
                     </tr>
                 `;
+            });
+        }
+        
+        window.syncSuggestedGrades = function() {
+            if(!confirm("Hệ thống sẽ điền tự động toàn bộ 'Xếp loại' theo 'Cột gợi ý'. Bạn có chắc chắn?")) return;
+            STATE.students.forEach((name, idx) => {
+                let stt = idx + 1;
+                let suggestedEl = document.getElementById(`suggested-grade-${stt}`);
+                let sel = document.getElementById(`grade-edit-${stt}`);
+                if(sel && suggestedEl) {
+                    sel.value = suggestedEl.innerText.trim();
+                }
             });
         }
 
