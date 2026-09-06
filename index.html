@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sổ Chủ Nhiệm Điện Tử </title>
+    <title>Sổ Chủ Nhiệm Điện Tử - Lớp 11A5</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
     /* ĐÃ TỐI ƯU HÓA LẠI CSS CHO MOBILE - CHO PHÉP VUỐT NGANG, KHÔNG BÓP MÉO BẢNG */
     @media (max-width: 600px) {
         body { font-size: 13px !important; padding: 4px; }
-        /* Loại bỏ lệnh ép bảng nhỏ lại 100%, để bảng tự bung ra và cho phép cuộn ngang */
+        /* Không ép table 100% nữa, để nó cuộn ngang tự do */
         table, th, td { font-size: 12px !important; padding: 6px 4px !important; }
         button, select, input { font-size: 13px !important; padding: 8px 6px !important; }
         .auth-card, #detailModal .auth-card { width: 95vw !important; max-width: 95vw !important; padding: 12px !important; }
@@ -63,8 +63,11 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .card { background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
-        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: #fff; min-width: 750px;} /* Tăng min-width để ép vuốt ngang trên đt */
+        
+        /* FIX BẢNG TRÊN MOBILE: THÊM min-width VÀ overflow-x ĐỂ VUỐT NGANG */
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: #fff; min-width: 800px; }
+        
         th, td { padding: 9px 8px; border-bottom: 1px solid var(--border); border-right: 1px solid #f1f5f9; text-align: center; }
         th { background: #f8fafc; color: #1e3a8a; font-weight: 800; }
         td:nth-child(2) { text-align: left; font-weight: 700; color: #0f172a; min-width: 140px; }
@@ -652,50 +655,58 @@
         };
 
         window.STATE = {
-            students: [...DEFAULT_STUDENTS_10A4],
-            phones: {},
-            positions: { 24: "Lớp trưởng", 6: "Bí thư", 12: "Lớp phó", 18: "Lớp phó", 1: "Tổ trưởng", 7: "Tổ trưởng", 13: "Tổ trưởng", 19: "Tổ trưởng" },
-            emulation: {}, map: {}, notices: [], duty: {}, 
-            officialGrades: {}, 
-            config: {
-                schoolName: "Trường THPT Tân Yên số 2",
-                className: "Lớp 10A4", 
-                schoolYear: "2026 - 2027",
-                teacherName: "Trịnh Ngọc Ánh",
-                startDate: "2026-09-07",
-                deadlineDay: 1,
-                deadlineHour: 23,
-                deadlineScope: "week"
-            },
-            dbRef: null
+            students: [], phones: {}, positions: {}, emulation: {}, map: {}, notices: [], duty: {}, officialGrades: {}, config: {}
         };
 
         window.isTeacherLoggedIn = false;
         window.tempDutyObj = {};
         window.selectedPosForSwap = null;
 
+        // BỌC LỚP KHIÊN AN TOÀN - CHỐNG LỖI NULL KHI DỮ LIỆU BỊ XÓA
+        function sanitizeState() {
+            if (!STATE.students || !Array.isArray(STATE.students) || STATE.students.length === 0) STATE.students = [...DEFAULT_STUDENTS_10A4];
+            if (!STATE.phones || typeof STATE.phones !== 'object') STATE.phones = {};
+            if (!STATE.positions || typeof STATE.positions !== 'object') STATE.positions = {};
+            if (!STATE.emulation || typeof STATE.emulation !== 'object') STATE.emulation = {};
+            if (!STATE.map || typeof STATE.map !== 'object' || Object.keys(STATE.map).length === 0) {
+                let m = {};
+                for (let i = 1; i <= 48; i++) m['pos_' + i] = i <= STATE.students.length ? i : null;
+                STATE.map = m;
+            }
+            if (!STATE.notices || !Array.isArray(STATE.notices)) STATE.notices = [];
+            if (!STATE.duty || typeof STATE.duty !== 'object') STATE.duty = {};
+            if (!STATE.officialGrades || typeof STATE.officialGrades !== 'object') STATE.officialGrades = {};
+            if (!STATE.config || typeof STATE.config !== 'object' || !STATE.config.schoolName) {
+                STATE.config = {
+                    schoolName: "Trường THPT Tân Yên số 2",
+                    className: "Lớp 10A4", 
+                    schoolYear: "2026 - 2027",
+                    teacherName: "Trịnh Ngọc Ánh",
+                    startDate: "2026-09-07",
+                    deadlineDay: 1,
+                    deadlineHour: 23,
+                    deadlineScope: "week"
+                };
+            }
+        }
+
         // ==========================================
         // KHỞI ĐỘNG HỆ THỐNG AN TOÀN
         // ==========================================
         window.onload = function() {
             try {
-                let s = localStorage.getItem('students'); if(s) STATE.students = JSON.parse(s);
-                let p = localStorage.getItem('phones'); if(p) STATE.phones = JSON.parse(p);
-                let pos = localStorage.getItem('positions'); if(pos) STATE.positions = JSON.parse(pos);
-                let em = localStorage.getItem('emulation'); if(em) STATE.emulation = JSON.parse(em);
-                let m = localStorage.getItem('map'); if(m) STATE.map = JSON.parse(m);
-                let n = localStorage.getItem('notices'); if(n) STATE.notices = JSON.parse(n);
-                let d = localStorage.getItem('duty'); if(d) STATE.duty = JSON.parse(d);
-                let og = localStorage.getItem('officialGrades'); if(og) STATE.officialGrades = JSON.parse(og);
-                let c = localStorage.getItem('config'); if(c) STATE.config = { ...STATE.config, ...JSON.parse(c) };
+                let s = localStorage.getItem('students'); if(s && s !== "null") STATE.students = JSON.parse(s);
+                let p = localStorage.getItem('phones'); if(p && p !== "null") STATE.phones = JSON.parse(p);
+                let pos = localStorage.getItem('positions'); if(pos && pos !== "null") STATE.positions = JSON.parse(pos);
+                let em = localStorage.getItem('emulation'); if(em && em !== "null") STATE.emulation = JSON.parse(em);
+                let m = localStorage.getItem('map'); if(m && m !== "null") STATE.map = JSON.parse(m);
+                let n = localStorage.getItem('notices'); if(n && n !== "null") STATE.notices = JSON.parse(n);
+                let d = localStorage.getItem('duty'); if(d && d !== "null") STATE.duty = JSON.parse(d);
+                let og = localStorage.getItem('officialGrades'); if(og && og !== "null") STATE.officialGrades = JSON.parse(og);
+                let c = localStorage.getItem('config'); if(c && c !== "null") STATE.config = { ...STATE.config, ...JSON.parse(c) };
             } catch(e) { console.error("Lỗi nạp local data:", e); }
 
-            if (!STATE.map || Object.keys(STATE.map).length === 0) {
-                let m = {};
-                for (let i = 1; i <= 48; i++) m['pos_' + i] = i <= STATE.students.length ? i : null;
-                STATE.map = m; window.saveData('map', m);
-            }
-
+            sanitizeState();
             window.buildUI();
 
             if (typeof firebase !== 'undefined') {
@@ -705,15 +716,17 @@
                     STATE.dbRef.once('value').then((snapshot) => {
                         if (snapshot.exists()) {
                             let data = snapshot.val();
-                            if(data.students) STATE.students = JSON.parse(data.students);
-                            if(data.phones) STATE.phones = JSON.parse(data.phones);
-                            if(data.positions) STATE.positions = JSON.parse(data.positions);
-                            if(data.emulation) STATE.emulation = JSON.parse(data.emulation);
-                            if(data.map) STATE.map = JSON.parse(data.map);
-                            if(data.notices) STATE.notices = JSON.parse(data.notices);
-                            if(data.duty) STATE.duty = JSON.parse(data.duty);
-                            if(data.officialGrades) STATE.officialGrades = JSON.parse(data.officialGrades);
-                            if(data.config) STATE.config = { ...STATE.config, ...JSON.parse(data.config) };
+                            if(data.students && data.students !== "null") STATE.students = JSON.parse(data.students);
+                            if(data.phones && data.phones !== "null") STATE.phones = JSON.parse(data.phones);
+                            if(data.positions && data.positions !== "null") STATE.positions = JSON.parse(data.positions);
+                            if(data.emulation && data.emulation !== "null") STATE.emulation = JSON.parse(data.emulation);
+                            if(data.map && data.map !== "null") STATE.map = JSON.parse(data.map);
+                            if(data.notices && data.notices !== "null") STATE.notices = JSON.parse(data.notices);
+                            if(data.duty && data.duty !== "null") STATE.duty = JSON.parse(data.duty);
+                            if(data.officialGrades && data.officialGrades !== "null") STATE.officialGrades = JSON.parse(data.officialGrades);
+                            if(data.config && data.config !== "null") STATE.config = { ...STATE.config, ...JSON.parse(data.config) };
+                            
+                            sanitizeState();
                             window.buildUI();
                         }
                     }).catch(err => console.warn("Firebase fetch error:", err));
@@ -733,20 +746,19 @@
         // GIAO DIỆN CƠ BẢN
         // ==========================================
         window.buildUI = function() {
-            try {
-                window.updateConfigUI();
-                window.populateSelects();
-                window.updateRealtimeWeekDisplay();
-                window.autoSelectCurrentWeek();
-                window.renderPublicSummaryTable();
-                window.renderSeatingMap();
-                window.renderAdminSeatingMap();
-                window.renderAdminStudentManager();
-                window.renderAnnouncements();
-                window.renderAdminAnnouncementsManager();
-                window.renderPublicDuty();
-                window.renderAdminZaloSummary();
-            } catch(e) { console.error("Lỗi buildUI:", e); }
+            // Chia nhỏ try catch, nếu 1 hàm lỗi thì các hàm khác vẫn load bình thường
+            try { window.updateConfigUI(); } catch(e) { console.error("Lỗi updateConfigUI:", e); }
+            try { window.populateSelects(); } catch(e) { console.error("Lỗi populateSelects:", e); }
+            try { window.updateRealtimeWeekDisplay(); } catch(e) { console.error("Lỗi updateRealtimeWeekDisplay:", e); }
+            try { window.autoSelectCurrentWeek(); } catch(e) { console.error("Lỗi autoSelectCurrentWeek:", e); }
+            try { window.renderPublicSummaryTable(); } catch(e) { console.error("Lỗi renderPublicSummaryTable:", e); }
+            try { window.renderSeatingMap(); } catch(e) { console.error("Lỗi renderSeatingMap:", e); }
+            try { window.renderAdminSeatingMap(); } catch(e) { console.error("Lỗi renderAdminSeatingMap:", e); }
+            try { window.renderAdminStudentManager(); } catch(e) { console.error("Lỗi renderAdminStudentManager:", e); }
+            try { window.renderAnnouncements(); } catch(e) { console.error("Lỗi renderAnnouncements:", e); }
+            try { window.renderAdminAnnouncementsManager(); } catch(e) { console.error("Lỗi renderAdminAnnouncementsManager:", e); }
+            try { window.renderPublicDuty(); } catch(e) { console.error("Lỗi renderPublicDuty:", e); }
+            try { window.renderAdminZaloSummary(); } catch(e) { console.error("Lỗi renderAdminZaloSummary:", e); }
         }
 
         window.updateConfigUI = function() {
@@ -2116,6 +2128,14 @@
         }
 
         // ==========================================
+        // QUẢN LÝ SƠ ĐỒ LỚP HỌC
+        // ==========================================
+        function createSeatingGridHTML(isAdmin) {
+            let html = "";
+            for (let col = 1; col <= 4; col++) {
+                html += `<div class="col-group group-tto-${col}">`;
+                html += `<div style="text-align:center; font-weight:900; color:#1e293b; margin-bottom:8px; font-size:0.9rem; text-transform:uppercase;">Tổ ${col}</div>`;
+                // ==========================================
         // QUẢN LÝ SƠ ĐỒ LỚP HỌC
         // ==========================================
         function createSeatingGridHTML(isAdmin) {
