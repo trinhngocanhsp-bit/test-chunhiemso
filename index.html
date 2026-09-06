@@ -855,7 +855,14 @@
             document.getElementById('public-month-select').innerHTML = monthHTML;
             document.getElementById('input-month-select').innerHTML = monthHTML;
             document.getElementById('seating-month-select').innerHTML = monthHTML;
-            document.getElementById('public-detail-month-select').innerHTML = monthHTML;
+            
+            let detailMonthHTML = monthHTML;
+            detailMonthHTML += `<optgroup label="Học Kỳ & Cả Năm">
+                                    <option value="Học Kỳ 1">Học Kỳ 1</option>
+                                    <option value="Học Kỳ 2">Học Kỳ 2</option>
+                                    <option value="Cả Năm">Cả Năm</option>
+                                </optgroup>`;
+            document.getElementById('public-detail-month-select').innerHTML = detailMonthHTML;
             
             document.getElementById('admin-grading-period').innerHTML = `
                 <optgroup label="Xếp Loại Tháng">
@@ -989,7 +996,7 @@
                     else total -= calculatePenalty(err.pen, count);
                 }
             });
-            if(dataObj.penalty_1_5x) total -= dataObj.penalty_1_5x;
+            if(dataObj.late_penalty) total -= dataObj.late_penalty;
             return total;
         }
 
@@ -1174,7 +1181,6 @@
             let totalErrorsCountOverall = 0;
             let totalValidWeeks = 0;
 
-            // Xử lý tạo bảng chi tiết lỗi từng tuần
             targetWeeks.forEach(weekName => {
                 let data = STATE.emulation[weekName]?.[stt] || {};
                 let isSub = isStudentWeekSubmitted(stt, weekName); 
@@ -1201,7 +1207,7 @@
                         else { weekDetails.push(`• ${err.label} (SL: ${count} -> Phạt: -${calculatePenalty(err.pen, count)}đ)`); errorCountThisWeek += count; }
                     }
                 });
-                if(data.penalty_1_5x) { weekDetails.push(`• Phạt quá hạn 1.5x (-${data.penalty_1_5x}đ)`); errorCountThisWeek++; }
+                if(data.late_penalty) { weekDetails.push(`• Phạt nộp báo cáo muộn ${data.late_days || 1} ngày (-${data.late_penalty}đ)`); errorCountThisWeek++; }
 
                 let score = calculateScore(stt, data);
                 totalErrorsCountOverall += errorCountThisWeek;
@@ -1221,7 +1227,6 @@
                 reportContent = `<tr><td colspan="3" style="padding:15px; border:1px solid #000; text-align:center; font-style:italic;">Chưa có dữ liệu đánh giá nào được ghi nhận trong thời gian này.</td></tr>`;
             }
 
-            // Tạo Bảng thống kê theo Tháng (Chỉ hiện khi xem Kỳ/Năm)
             let monthlySummaryHTML = "";
             if (type === 'semester' || type === 'year') {
                 let months = type === 'semester' 
@@ -1229,13 +1234,13 @@
                     : ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"];
 
                 monthlySummaryHTML = `
-                <p style="font-weight:bold; font-size:16px; text-transform:uppercase; margin-bottom:8px;">1. TỔNG HỢP ĐIỂM SỐ & XẾP LOẠI CÁC THÁNG</p>
+                <p style="font-weight:bold; font-size:16px; text-transform:uppercase; margin-bottom:8px;">1. TỔNG HỢP HẠNH KIỂM (XẾP LOẠI) TỪNG THÁNG</p>
                 <table>
                     <thead>
                         <tr>
                             <th style="width: 20%;">Tháng</th>
                             <th>Chi tiết điểm các tuần</th>
-                            <th style="width: 25%;">Xếp loại Tháng</th>
+                            <th style="width: 25%;">Hạnh kiểm Tháng</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1260,7 +1265,6 @@
                 monthlySummaryHTML += `</tbody></table>`;
             }
 
-            // Xử lý Hạnh kiểm & Xếp loại tổng
             let overviewHTML = "";
             let finalGrade = getGradeForPeriod(stt, period);
             let gradeLabel = (type === 'week') ? "ĐÁNH GIÁ TUẦN" : "XẾP LOẠI RÈN LUYỆN (HẠNH KIỂM)";
@@ -1300,8 +1304,7 @@
                 `;
             }
 
-            // Khắc phục lỗi in "Lớp: Lớp" bằng cách lọc sạch chữ lớp phía trước trong cấu hình
-            let classNameClean = STATE.config.className.replace(/^lớp\s*/i, '');
+            let classNameClean = STATE.config.className.replace(/lớp/ig, '').trim();
 
             let printWindow = window.open('', '_blank');
             if(!printWindow) return alert("Vui lòng cho phép trình duyệt mở tab mới (Pop-up) để xem phiếu báo cáo!");
@@ -1626,16 +1629,16 @@
                             else violationList.push(`${err.label} (SL:${count} / -${calculatePenalty(err.pen, count)}đ)`);
                         }
                     });
-                    if(studentData.penalty_1_5x) violationList.push(`Phạt quá hạn 1.5x (-${studentData.penalty_1_5x}đ)`);
+                    if(studentData.late_penalty) violationList.push(`Phạt nộp muộn báo cáo ${studentData.late_days||1} ngày (-${studentData.late_penalty}đ)`);
                 }
 
                 let defaultMsg = "";
                 if (isSub) {
                     if (violationList.length > 0) {
                         let violationText = violationList.join(', ');
-                        defaultMsg = `GVCN lớp ${STATE.config.className} xin thông báo kết quả ${week} của em ${name}: tổng điểm đạt ${total}đ. Lỗi vi phạm: ${violationText}. Kính mong PH phối hợp nhắc nhở em. Trân trọng!`;
+                        defaultMsg = `GVCN lớp ${STATE.config.className} xin thông báo kết quả ${week} của em ${name}: tổng điểm đạt ${total}đ. Lỗi vi phạm: ${violationText}. Kính đề nghị quý PH phối hợp nhắc nhở em. Trân trọng!`;
                     } else {
-                        defaultMsg = `GVCN lớp ${STATE.config.className} xin thông báo kết quả ${week} của em ${name}: tổng điểm đạt ${total}đ. Em thực hiện rất tốt nội quy. Kính mong PH tiếp tục động viên em. Trân trọng!`;
+                        defaultMsg = `GVCN lớp ${STATE.config.className} xin thông báo kết quả ${week} của em ${name}: tổng điểm đạt ${total}đ. Em thực hiện rất tốt nội quy. Kính đề nghị quý PH tiếp tục động viên em. Trân trọng!`;
                     }
                 } else {
                     defaultMsg = `GVCN lớp ${STATE.config.className} xin thông báo: Hiện tại chưa có điểm tổng kết ${week} của em ${name}. Trân trọng!`;
@@ -1702,9 +1705,9 @@
                 }
             });
 
-            if(data.penalty_1_5x) {
+            if(data.late_penalty) {
                 hasRecord = true;
-                html += `<tr><td style="border:1px solid #cbd5e1; padding:6px 4px; color:#b91c1c; font-weight:700;">Phạt quá hạn (1.5x)</td><td style="border:1px solid #cbd5e1; padding:6px 4px; text-align:center;">1</td><td style="border:1px solid #cbd5e1; padding:6px 4px; text-align:right; font-weight:700; color:#dc2626;">-${data.penalty_1_5x}đ</td></tr>`;
+                html += `<tr><td style="border:1px solid #cbd5e1; padding:6px 4px; color:#b91c1c; font-weight:700;">Phạt nộp muộn báo cáo ${data.late_days||1} ngày</td><td style="border:1px solid #cbd5e1; padding:6px 4px; text-align:center;">-</td><td style="border:1px solid #cbd5e1; padding:6px 4px; text-align:right; font-weight:700; color:#dc2626;">-${data.late_penalty}đ</td></tr>`;
             }
 
             if(!hasRecord && respPoint === 0) html += `<tr><td colspan="3" style="padding:10px; text-align:center; color:#64748b;">Không có phát sinh vi phạm.</td></tr>`;
@@ -1724,8 +1727,23 @@
             if(!stt) { alert("Vui lòng chọn học sinh!"); return; }
 
             let name = STATE.students[stt - 1];
-            let targetWeeks = searchType === 'week' ? [document.getElementById("public-detail-week-select").value] : (MONTH_WEEKS[document.getElementById("public-detail-month-select").value] || []);
-            let timeLabel = searchType === 'week' ? targetWeeks[0] : document.getElementById("public-detail-month-select").value;
+            
+            let periodVal = document.getElementById("public-detail-month-select").value;
+            let targetWeeks = searchType === 'week' ? [document.getElementById("public-detail-week-select").value] : [];
+            
+            if(searchType === 'month') {
+                if (periodVal.startsWith("Tháng")) {
+                    targetWeeks = MONTH_WEEKS[periodVal] || [];
+                } else if (periodVal === "Học Kỳ 1") {
+                    ["Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"].forEach(m => targetWeeks.push(...(MONTH_WEEKS[m] || [])));
+                } else if (periodVal === "Học Kỳ 2") {
+                    ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5"].forEach(m => targetWeeks.push(...(MONTH_WEEKS[m] || [])));
+                } else if (periodVal === "Cả Năm") {
+                    for(let i=1; i<=35; i++) targetWeeks.push(i);
+                }
+            }
+
+            let timeLabel = searchType === 'week' ? targetWeeks[0] : periodVal;
 
             let listHTML = `<ul style="padding-left:16px; font-size:0.85rem; margin-bottom:0; line-height:1.6;">`;
             let totalRecords = 0;
@@ -1743,7 +1761,7 @@
                         else weekDetails.push(`<span style="font-weight:700; color:#b91c1c;">${err.label}</span> (-${calculatePenalty(err.pen, count)}đ)`);
                     }
                 });
-                if(data.penalty_1_5x) weekDetails.push(`<span style="font-weight:700; color:#b91c1c;">Phạt quá hạn 1.5x</span> (-${data.penalty_1_5x}đ)`);
+                if(data.late_penalty) weekDetails.push(`<span style="font-weight:700; color:#b91c1c;">Phạt nộp muộn ${data.late_days||1} ngày</span> (-${data.late_penalty}đ)`);
 
                 if(weekDetails.length > 0) { listHTML += `<li style="margin-bottom:6px;"><span style="color:#0ea5e9; font-weight:800; background:#e0f2fe; padding:2px 6px; border-radius:4px;">${weekName}</span> ${weekDetails.join(', ')}</li>`; totalRecords++; }
             });
@@ -1764,10 +1782,9 @@
             document.getElementById("group-pass-input").value = "";
             document.getElementById("group-member-entry-container").style.display = "none";
             document.getElementById("lock-status-alert").style.display = "none";
-            window.showDeadlineInfo(); // Gọi hàm hiển thị deadline
+            window.showDeadlineInfo(); 
         }
 
-        // THÊM HÀM MỚI NÀY VÀO
         window.showDeadlineInfo = function() {
             let weekSelect = document.getElementById("input-week-select");
             let infoBox = document.getElementById("deadline-info-display");
@@ -1874,7 +1891,7 @@
                 alertBox.style.background = "#fffbeb";
                 alertBox.style.color = "#b45309";
                 alertBox.style.border = "1px solid #fde047";
-                alertBox.innerHTML = `⚠️ ĐÃ QUÁ HẠN NỘP (${formatDate(submitDeadline)}). Tổ trưởng bị phạt hệ số 1.5!`;
+                alertBox.innerHTML = `⚠️ ĐÃ QUÁ HẠN NỘP (${formatDate(submitDeadline)}). Mỗi ngày nộp muộn Tổ trưởng sẽ bị trừ 30 điểm!`;
             } else {
                 alertBox.style.background = "#dcfce7";
                 alertBox.style.color = "#166534";
@@ -2008,20 +2025,16 @@
             if (groupId) {
                 STATE.emulation[week]['to' + groupId + '_submitted'] = true;
                 if(isPastSubmit) {
+                    let lateTime = today.getTime() - submitDeadline.getTime();
+                    let lateDays = Math.ceil(lateTime / (1000 * 3600 * 24));
+                    let penalty = lateDays * 30;
+
                     let members = getGroupMembers(groupId);
                     let toTruongStt = members.find(stt => STATE.positions[stt] === "Tổ trưởng");
                     if(toTruongStt) {
                         if(!STATE.emulation[week][toTruongStt]) STATE.emulation[week][toTruongStt] = {};
-                        
-                        let totalPenSoFar = 0;
-                        ERROR_TYPES.forEach(err => {
-                            let count = STATE.emulation[week][toTruongStt][err.key] || 0;
-                            if(count > 0 && err.pen > 0 && err.pen !== 'custom_add' && err.pen !== 'custom_sub') {
-                                totalPenSoFar += calculatePenalty(err.pen, count);
-                            }
-                        });
-                        let extraPen = Math.floor(totalPenSoFar * 0.5); 
-                        STATE.emulation[week][toTruongStt].penalty_1_5x = extraPen;
+                        STATE.emulation[week][toTruongStt].late_penalty = penalty;
+                        STATE.emulation[week][toTruongStt].late_days = lateDays;
                     }
                 }
             } else {
@@ -2477,12 +2490,13 @@
         // ==========================================
         // QUẢN LÝ TRỰC NHẬT
         // ==========================================
-        const DUTY_ROLES = [
-            { id: 'quet_nha', label: 'Quét nhà, lau nhà' },
-            { id: 'giat_gan', label: 'Giặt giẻ, lau bảng, bàn GV' },
-            { id: 'do_rac', label: 'Đổ rác' },
-            { id: 'hanh_lang', label: 'Quét hành lang' },
-            { id: 'cham_soc', label: 'Chăm sóc cây/Bê nước' }
+        const DUTY_DAYS = [
+            { id: 't2', label: 'Thứ Hai' },
+            { id: 't3', label: 'Thứ Ba' },
+            { id: 't4', label: 'Thứ Tư' },
+            { id: 't5', label: 'Thứ Năm' },
+            { id: 't6', label: 'Thứ Sáu' },
+            { id: 't7', label: 'Thứ Bảy' }
         ];
 
         window.verifyDutyAuth = function() {
@@ -2496,13 +2510,37 @@
         window.renderDutyEditor = function() {
             let container = document.getElementById("duty-entry-container");
             container.style.display = "block";
-            let html = "";
-            DUTY_ROLES.forEach(r => {
-                let currentNames = window.tempDutyObj[r.id] || "";
+            
+            let weekStr = document.getElementById("duty-week-select").value;
+            let weekNum = parseInt(weekStr.replace("Tuần ", "")) || 1;
+            let prevWeek = "Tuần " + (weekNum > 1 ? weekNum - 1 : 1);
+            let violators = [];
+            STATE.students.forEach((name, idx) => {
+                let stt = idx + 1;
+                let data = STATE.emulation[prevWeek]?.[stt] || {};
+                let score = calculateScore(stt, data);
+                if(score < 100 && score !== '--') {
+                    violators.push(`${name} (-${100 - score}đ)`);
+                }
+            });
+            let violatorsText = violators.length > 0 ? violators.join(", ") : "Không có học sinh vi phạm tuần trước.";
+
+            let html = `
+            <div style="background:#fff3cd; border:1px solid #fde047; padding:10px; border-radius:8px; margin-bottom:15px;">
+                <strong style="color:#b45309;"><i class="fa-solid fa-triangle-exclamation"></i> Gợi ý HS vi phạm (Tuần trước):</strong>
+                <div style="font-size:0.85rem; color:#92400e; margin-top:4px;">${violatorsText}</div>
+            </div>`;
+
+            DUTY_DAYS.forEach(r => {
+                let leader = window.tempDutyObj[r.id+'_leader'] || "";
+                let members = window.tempDutyObj[r.id+'_members'] || "";
                 html += `
                 <div style="margin-bottom:10px; background:#fff; padding:10px; border-radius:8px; border:1px solid #ccfbf1;">
-                    <label style="display:block; font-weight:700; color:#0f766e; margin-bottom:6px; font-size:0.85rem;"><i class="fa-solid fa-thumbtack"></i> ${r.label}</label>
-                    <input type="text" id="duty-edit-${r.id}" value="${currentNames}" placeholder="Ví dụ: An, Bình, Cường..." style="width:100%; padding:8px; border-radius:6px; border:1px solid #99f6e4;">
+                    <label style="display:block; font-weight:700; color:#0f766e; margin-bottom:6px; font-size:0.85rem;"><i class="fa-solid fa-calendar-day"></i> ${r.label}</label>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <input type="text" id="duty-leader-${r.id}" value="${leader}" placeholder="Nhóm trưởng..." style="flex:1; min-width:100px; padding:8px; border-radius:6px; border:1px solid #f87171; font-weight:bold; color:#b91c1c;">
+                        <input type="text" id="duty-members-${r.id}" value="${members}" placeholder="Các thành viên khác (cách nhau dấu phẩy)..." style="flex:2; min-width:180px; padding:8px; border-radius:6px; border:1px solid #99f6e4;">
+                    </div>
                 </div>`;
             });
             html += `<button class="btn-action" style="width:100%; background:#0f766e; font-size:1rem;" onclick="window.saveDuty()"><i class="fa-solid fa-floppy-disk"></i> LƯU PHÂN CÔNG</button>`;
@@ -2511,8 +2549,9 @@
 
         window.saveDuty = function() {
             let week = document.getElementById("duty-week-select").value;
-            DUTY_ROLES.forEach(r => {
-                window.tempDutyObj[r.id] = document.getElementById(`duty-edit-${r.id}`).value.trim();
+            DUTY_DAYS.forEach(r => {
+                window.tempDutyObj[r.id+'_leader'] = document.getElementById(`duty-leader-${r.id}`).value.trim();
+                window.tempDutyObj[r.id+'_members'] = document.getElementById(`duty-members-${r.id}`).value.trim();
             });
             STATE.duty[week] = window.tempDutyObj;
             window.saveData('duty', STATE.duty);
@@ -2528,13 +2567,16 @@
             
             let hasData = false;
             let html = "";
-            DUTY_ROLES.forEach(r => {
-                if(data[r.id]) {
+            DUTY_DAYS.forEach(r => {
+                let leader = data[r.id+'_leader'];
+                let members = data[r.id+'_members'];
+                if(leader || members) {
                     hasData = true;
                     html += `
-                    <div style="background:#fff; border:1px solid #99f6e4; padding:8px 12px; border-radius:8px; flex:1; min-width:140px;">
-                        <div style="font-size:0.7rem; color:#0f766e; font-weight:800; text-transform:uppercase; margin-bottom:4px;">${r.label}</div>
-                        <div style="font-size:0.85rem; font-weight:700; color:#1e293b;">${data[r.id]}</div>
+                    <div style="background:#fff; border:1px solid #99f6e4; padding:8px 12px; border-radius:8px; flex:1; min-width:200px;">
+                        <div style="font-size:0.8rem; color:#0f766e; font-weight:800; text-transform:uppercase; margin-bottom:6px; border-bottom:1px dashed #ccfbf1; padding-bottom:4px;">${r.label}</div>
+                        ${leader ? `<div style="font-size:0.85rem; font-weight:800; color:#dc2626; margin-bottom:4px;"><i class="fa-solid fa-star"></i> NT: ${leader}</div>` : ''}
+                        ${members ? `<div style="font-size:0.85rem; color:#1e293b;"><i class="fa-solid fa-users"></i> ${members}</div>` : ''}
                     </div>`;
                 }
             });
