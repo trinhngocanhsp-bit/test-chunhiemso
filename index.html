@@ -18,11 +18,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+    /* ĐÃ TỐI ƯU HÓA LẠI CSS CHO MOBILE - CHO PHÉP VUỐT NGANG, KHÔNG BÓP MÉO BẢNG */
     @media (max-width: 600px) {
         body { font-size: 13px !important; padding: 4px; }
-        table { min-width: 100% !important; }
-        table, th, td { font-size: 12px !important; padding: 4px !important; }
-        button, select, input { font-size: 13px !important; padding: 6px !important; }
+        /* Loại bỏ lệnh ép bảng nhỏ lại 100%, để bảng tự bung ra và cho phép cuộn ngang */
+        table, th, td { font-size: 12px !important; padding: 6px 4px !important; }
+        button, select, input { font-size: 13px !important; padding: 8px 6px !important; }
         .auth-card, #detailModal .auth-card { width: 95vw !important; max-width: 95vw !important; padding: 12px !important; }
         .nav-bar-grid { grid-template-columns: repeat(2, 1fr) !important; }
         .modern-banner-wrapper { padding: 12px 8px !important; }
@@ -31,7 +32,6 @@
         .seat-name { font-size: 0.55rem !important; }
         .search-controls { flex-direction: column; align-items: stretch !important; }
         .search-controls select, .search-controls button { width: 100% !important; margin-bottom: 6px; }
-        .table-responsive { overflow-x: auto; }
     }
         :root { --primary: #1e40af; --bg: #f1f5f9; --text-main: #0f172a; --border: #cbd5e1; --font-main: 'Be Vietnam Pro', sans-serif; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-main); -webkit-tap-highlight-color: transparent; }
@@ -63,8 +63,8 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .card { background: #ffffff; border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);}
-        .table-responsive { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: #fff; min-width: 600px;}
+        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: #fff; min-width: 750px;} /* Tăng min-width để ép vuốt ngang trên đt */
         th, td { padding: 9px 8px; border-bottom: 1px solid var(--border); border-right: 1px solid #f1f5f9; text-align: center; }
         th { background: #f8fafc; color: #1e3a8a; font-weight: 800; }
         td:nth-child(2) { text-align: left; font-weight: 700; color: #0f172a; min-width: 140px; }
@@ -1418,7 +1418,7 @@
             let type = document.getElementById("admin-print-type").value;
             let period = document.getElementById("admin-print-period").value;
 
-            if(!confirm(`Bạn đang xuất phiếu báo cáo của TOÀN BỘ 45 HỌC SINH cho ${period}. Quá trình này sẽ tạo ra 1 file PDF dài 45 trang. Tiếp tục?`)) return;
+            if(!confirm(`Bạn đang xuất phiếu báo cáo của TOÀN BỘ ${STATE.students.length} HỌC SINH cho ${period}. Quá trình này sẽ mất một chút thời gian. Tiếp tục?`)) return;
 
             let allHTMLContent = "";
             STATE.students.forEach((name, idx) => {
