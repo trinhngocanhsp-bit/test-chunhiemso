@@ -1279,22 +1279,6 @@ window.onload = function() {
             window.renderPublicSummaryTable();
         }
 
-        window.renderAdminZaloSummary = function() {
-            let week = document.getElementById("admin-zalo-week-select").value;
-            let tbody = document.getElementById("admin-zalo-summary-tbody");
-            if(!tbody) return;
-            tbody.innerHTML = "";
-
-            STATE.students.forEach((name, idx) => {
-                let stt = idx + 1;
-                let phone = STATE.phones[stt] || "";
-                let isSub = isStudentWeekSubmitted(stt, week);
-                let total = isSub ? calculateScore(stt, STATE.emulation[week][stt]) : '--';
-                let defaultMsg = isSub ? `GVCN lớp ${STATE.config.className} thông báo ${week} của em ${name}: đạt ${total}đ. Kính đề nghị quý PH phối hợp nhắc nhở. Trân trọng!` : `GVCN lớp ${STATE.config.className}: Chưa có điểm ${week} của em ${name}.`;
-
-                tbody.innerHTML += `<tr><td><strong>${stt}</strong></td><td style="text-align:left;">${name}</td><td><strong>${total}đ</strong></td><td style="text-align:left;"><textarea id="zalo-msg-${stt}" rows="2" style="width:100%; padding:6px; font-size:0.78rem; border-radius:6px; border:1px solid #cbd5e1;">${defaultMsg}</textarea></td><td>${phone?`<a href="https://zalo.me/${phone}?text=${encodeURIComponent(defaultMsg)}" target="_blank" class="btn-action" style="background:#0068ff; padding:5px 10px; font-size:0.75rem;"><i class="fa-solid fa-comment-sms"></i> Gửi</a>`:'<span style="color:#94a3b8; font-size:0.75rem;">Thiếu SĐT</span>'}</td></tr>`;
-            });
-        }
 
    window.openStudentDetailModal = function(stt, inputWeek = null) {
             const week = inputWeek || document.getElementById("public-week-select").value;
@@ -2454,6 +2438,7 @@ window.addDutyMemberSlot = function(week, dayKey) {
     containerList.appendChild(div);
 };
 // ================= KHÔI PHỤC TÍNH NĂNG NHẮN TIN ZALO =================
+// ================= KHÔI PHỤC TÍNH NĂNG NHẮN TIN ZALO (XUỐNG DÒNG ĐẸP MẮT) =================
 window.renderAdminZaloSummary = function() {
     let week = document.getElementById("admin-zalo-week-select").value;
     let tbody = document.getElementById("admin-zalo-summary-tbody");
@@ -2500,34 +2485,35 @@ window.renderAdminZaloSummary = function() {
             }
         }
         
-        // Xây dựng chuỗi chi tiết
+        // Xây dựng chuỗi chi tiết có xuống dòng
         let detailParts = [];
-        if (bonusDetails.length > 0) detailParts.push(`Ưu điểm: ${bonusDetails.join(', ')}`);
-        if (errorDetails.length > 0) detailParts.push(`Vi phạm: ${errorDetails.join(', ')}`);
+        if (bonusDetails.length > 0) detailParts.push(`+ Ưu điểm: ${bonusDetails.join(', ')}`);
+        if (errorDetails.length > 0) detailParts.push(`- Vi phạm: ${errorDetails.join(', ')}`);
 
         let detailString = "";
         if (detailParts.length > 0) {
-            detailString = ` Chi tiết -> ${detailParts.join('. ')}.`;
+            detailString = `\n${detailParts.join('\n')}`;
         } else {
-            detailString = ` Em thực hiện tốt nội quy, không vi phạm kỷ luật.`;
+            detailString = `\n+ Nhận xét: Em thực hiện tốt nội quy, không vi phạm.`;
         }
 
-        // Chốt lại câu thông báo (Gọn gàng, chốt câu "Trân trọng!")
+        // Cấu trúc tin nhắn chia dòng
         let defaultMsg = isSub 
-            ? `GVCN ${STATE.config.className || ''} thông báo kết quả ${week} của em ${name}: Đạt ${total} điểm.${detailString} Trân trọng!` 
-            : `GVCN ${STATE.config.className || ''} thông báo: Hiện chưa có dữ liệu điểm ${week} của em ${name}.`;
+            ? `GVCN ${STATE.config.className || ''} thông báo kết quả ${week} của em ${name}:\n* Tổng điểm: ${total} điểm${detailString}\n\nTrân trọng!` 
+            : `GVCN ${STATE.config.className || ''} thông báo:\nHiện chưa có dữ liệu điểm ${week} của em ${name}.\n\nTrân trọng!`;
 
         let phoneAction = phone 
             ? `<a href="https://zalo.me/${phone}?text=${encodeURIComponent(defaultMsg)}" target="_blank" class="btn-action" style="background:#0068ff; padding:6px 12px; font-size:0.78rem; border-radius:6px; text-decoration:none;"><i class="fa-solid fa-comment-sms"></i> Gửi Zalo</a>` 
             : `<span style="color:#94a3b8; font-size:0.75rem; font-style:italic;">Chưa có SĐT</span>`;
 
+        // Tăng rows="5" để khung nhập liệu hiển thị trọn vẹn các dòng
         tbody.innerHTML += `
             <tr style="border-bottom: 1px solid #e2e8f0;">
                 <td style="padding:8px;"><strong>${stt}</strong></td>
                 <td style="text-align:left; padding:8px; font-weight:600; color:#1e293b;">${name}</td>
                 <td style="padding:8px;"><strong style="font-size:1.05rem; color:${total === '--' ? '#94a3b8' : (total < 80 ? '#dc2626' : '#16a34a')};">${total}</strong></td>
                 <td style="text-align:left; padding:8px;">
-                    <textarea id="zalo-msg-${stt}" rows="3" style="width:100%; padding:8px; font-size:0.8rem; border-radius:6px; border:1px solid #cbd5e1; outline:none; resize:vertical;">${defaultMsg}</textarea>
+                    <textarea id="zalo-msg-${stt}" rows="5" style="width:100%; padding:8px; font-size:0.8rem; border-radius:6px; border:1px solid #cbd5e1; outline:none; resize:vertical; font-family:inherit;">${defaultMsg}</textarea>
                 </td>
                 <td style="padding:8px;">${phoneAction}</td>
             </tr>`;
