@@ -1783,32 +1783,35 @@ window.addNewStudent = function() {
         window.renderSeatingMap = function() {}
 function createSeatingGridHTML(isAdmin) {
     let html = '';
-    // Ánh xạ Cột Vật Lý (1,2,3,4) -> Tổ đang ngồi ở đó
     let labelSwap = STATE.groupLabelSwap || { 1: 1, 2: 2, 3: 3, 4: 4 };
 
     const renderSeat = (p) => {
         let stt = STATE.map['pos_' + p];
         let name = stt ? STATE.students[stt - 1] : "";
         let role = stt ? (STATE.positions[stt] || "") : "";
-        let roleBadge = role ? `<div style="font-size:0.5rem; color:#fff; background:#ef4444; border-radius:4px; padding:2px 4px; display:inline-block; margin-bottom:2px; font-weight:bold;">${role}</div>` : '';
+        
+        // CẢI TIẾN: Cho huy hiệu chức vụ nổi lên viền trên (top: -8px), không chiếm chỗ của tên
+        let roleBadge = role ? `<div style="position:absolute; top:-8px; left:50%; transform:translateX(-50%); font-size:0.55rem; color:#fff; background:#ef4444; border-radius:10px; padding:2px 8px; font-weight:bold; white-space:nowrap; box-shadow:0 1px 2px rgba(0,0,0,0.2); z-index:5;">${role}</div>` : '';
+        
         let extraClass = !stt ? 'empty-seat' : '';
         let onclick = isAdmin ? `onclick="window.selectSeatForSwap(${p})"` : '';
         
+        // CẢI TIẾN: Thiết lập min-width và hiển thị giữa trung tâm
         return `
-        <div class="seat-box ${extraClass}" id="seat-${isAdmin?'admin':'public'}-${p}" ${onclick} style="border:2px solid #94a3b8; box-shadow:0 1px 3px rgba(0,0,0,0.05); width: 75px; height: 50px;">
+        <div class="seat-box ${extraClass}" id="seat-${isAdmin?'admin':'public'}-${p}" ${onclick} style="position:relative; margin-top:8px; border:2px solid #94a3b8; box-shadow:0 1px 3px rgba(0,0,0,0.05); width: 100%; min-width: 65px; max-width: 80px; height: 50px; display:flex; align-items:center; justify-content:center;">
             ${roleBadge}
-            <div class="seat-name" style="text-align:center; font-size:0.58rem;">${name || "Trống"}</div>
+            <div class="seat-name" style="text-align:center; font-size:0.6rem; width:100%; padding: 0 2px;">${name || "Trống"}</div>
         </div>`;
     };
 
     const renderGroupColumn = (groupTitle, groupClass, pList) => {
         let seatsHTML = '';
         for (let i = 0; i < pList.length; i += 2) {
-            seatsHTML += `<div style="display:flex; gap:4px; justify-content:center; margin-bottom:4px;">${renderSeat(pList[i])}${pList[i+1] ? renderSeat(pList[i+1]) : ''}</div>`;
+            seatsHTML += `<div style="display:flex; gap:6px; justify-content:center; margin-bottom:6px;">${renderSeat(pList[i])}${pList[i+1] ? renderSeat(pList[i+1]) : ''}</div>`;
         }
         return `
-        <div class="${groupClass}" style="flex: 1; min-width: 170px; padding: 8px; border-radius: 10px; background: #ffffff; display: flex; flex-direction: column;">
-            <div style="text-align:center; font-weight:900; font-size:0.85rem; text-transform:uppercase; margin-bottom:8px; padding:4px; border-radius:6px; background:rgba(0,0,0,0.04);">${groupTitle}</div>
+        <div class="${groupClass}" style="flex: 1; min-width: 150px; padding: 10px; border-radius: 10px; background: #ffffff; display: flex; flex-direction: column;">
+            <div style="text-align:center; font-weight:900; font-size:0.85rem; text-transform:uppercase; margin-bottom:12px; padding:4px; border-radius:6px; background:rgba(0,0,0,0.04);">${groupTitle}</div>
             ${seatsHTML}
         </div>`;
     };
@@ -1823,7 +1826,7 @@ function createSeatingGridHTML(isAdmin) {
     html += `<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; width: 100%;">`;
     for (let c = 1; c <= 4; c++) {
         let groupId = labelSwap[c] || c; 
-        html += renderGroupColumn(`Tổ ${groupId}`, `group-tto-${groupId}`, cols[c]);
+        html += renderGroupColumn("Tổ " + groupId, "group-tto-" + groupId, cols[c]);
     }
     html += `</div>`;
     return html;
